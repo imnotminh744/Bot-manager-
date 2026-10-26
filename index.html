@@ -6,697 +6,305 @@
     <title>Blox Fruit Manager - Ultra Gaming Edition</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome 6 Icons -->
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts (Inter & Fira Code) -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-body: #090d16;
-            --bg-card: #131b2e;
-            --bg-card-hover: #1a243f;
-            --border-color: #232f4e;
-            --primary-glow: #6366f1;
-            --accent-cyan: #06b6d4;
-            --accent-green: #10b981;
-            --accent-purple: #a855f7;
-            --accent-pink: #ec4899;
-            --accent-orange: #f97316;
+            --bg-dark: #0b0f19;
+            --panel-bg: #131c31;
+            --neon-cyan: #00f3ff;
+            --neon-pink: #ff007f;
+            --neon-purple: #9d00ff;
+            --text-main: #e2e8f0;
         }
-
         body {
-            background-color: var(--bg-body);
-            color: #f1f5f9;
-            font-family: 'Inter', sans-serif;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%);
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
             min-height: 100vh;
         }
-
-        /* Glassmorphism Cards */
-        .glass-card {
-            background: rgba(19, 27, 46, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
+        h1, h2, h3, h4, h5, .brand-title, .nav-tabs {
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 1px;
         }
-
-        .glass-card:hover {
-            border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 12px 35px -10px rgba(99, 102, 241, 0.15);
+        .navbar-brand {
+            color: var(--neon-cyan) !important;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+            font-weight: 700;
         }
-
-        /* Custom Header */
-        .header-logo {
-            background: linear-gradient(135deg, #6366f1, #a855f7);
-            border-radius: 14px;
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+        .card-custom {
+            background: var(--panel-bg);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
         }
-
-        /* Nav Tabs Gaming Style */
-        .nav-pills-custom {
-            background: rgba(15, 23, 42, 0.9);
-            padding: 6px;
-            border-radius: 14px;
-            border: 1px solid var(--border-color);
+        .stat-card {
+            border-left: 4px solid var(--neon-cyan);
+            transition: transform 0.2s;
         }
-
-        .nav-pills-custom .nav-link {
-            color: #94a3b8;
-            font-weight: 600;
-            border-radius: 10px;
-            padding: 10px 20px;
-            transition: all 0.3s ease;
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
         }
-
-        .nav-pills-custom .nav-link.active {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-        }
-
-        /* Stat Cards */
-        .stat-icon {
-            width: 54px;
-            height: 54px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-        }
-
-        /* Form Control Styling */
-        .form-control-custom {
-            background-color: #0b1120;
-            border: 1px solid var(--border-color);
-            color: #f8fafc;
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-control-custom:focus {
-            background-color: #0b1120;
-            border-color: var(--primary-glow);
-            color: #ffffff;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-        }
-
-        .form-label-custom {
-            font-size: 0.82rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #94a3b8;
-            margin-bottom: 6px;
-        }
-
-        /* Custom Buttons */
-        .btn-neon-primary {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
-            font-weight: 600;
+        .btn-cyber {
+            background: linear-gradient(45deg, var(--neon-purple), var(--neon-pink));
             border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .btn-neon-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
             color: white;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.4);
         }
-
-        /* Table Styling */
-        .custom-table {
-            margin-bottom: 0;
-            color: #cbd5e1;
+        .btn-cyber:hover {
+            opacity: 0.9;
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.7);
         }
-
-        .custom-table thead th {
-            background: #0b1120;
-            color: #94a3b8;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            border-bottom: 2px solid var(--border-color);
-            padding: 14px 16px;
+        .table-dark-custom {
+            background-color: transparent;
+            color: var(--text-main);
         }
-
-        .custom-table tbody tr {
-            border-bottom: 1px solid rgba(35, 47, 78, 0.5);
-            transition: all 0.2s ease;
+        .table-dark-custom th {
+            background-color: #1a2642;
+            color: var(--neon-cyan);
+            border-bottom: 2px solid var(--neon-cyan);
         }
-
-        .custom-table tbody tr:hover {
-            background: rgba(30, 41, 59, 0.6);
-        }
-
-        .custom-table td {
-            padding: 14px 16px;
+        .table-dark-custom td {
+            border-color: rgba(255, 255, 255, 0.05);
             vertical-align: middle;
         }
-
-        /* Badges */
-        .badge-status {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-        }
-        .badge-pending { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
-        .badge-working { background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
-        .badge-completed { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .badge-cancelled { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-
-        /* Code Blocks */
-        pre code {
-            font-family: 'Fira Code', monospace !important;
-            font-size: 0.85rem;
-            color: #38bdf8 !important;
-            background: #090d16 !important;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 14px;
-            display: block;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-
-        .credential-box {
-            background: #0b1120;
-            border: 1px solid #1e293b;
-            border-radius: 6px;
-            padding: 4px 8px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            color: #a5b4fc;
-        }
-
-        .btn-action-icon {
-            width: 32px;
-            height: 32px;
+        .badge-pending { background-color: #ffc107; color: #000; font-weight: 600; }
+        .badge-doing { background-color: #0dcaf0; color: #000; font-weight: 600; }
+        .badge-done { background-color: #198754; color: #fff; font-weight: 600; }
+        .script-box {
+            background: #07090f;
+            border: 1px dashed var(--neon-cyan);
             border-radius: 8px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
+            font-family: monospace;
+            color: var(--neon-cyan);
         }
     </style>
 </head>
-<body class="py-4">
+<body>
 
-    <div class="container-xl">
-        <!-- Top Navigation Bar -->
-        <div class="glass-card p-3 mb-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-            <div class="d-flex align-items-center gap-3">
-                <div class="header-logo p-3 text-white">
-                    <i class="fa-solid fa-gamepad fa-xl"></i>
-                </div>
-                <div>
-                    <div class="d-flex align-items-center gap-2">
-                        <h4 class="fw-800 mb-0 text-white">BLOX FRUIT MANAGER</h4>
-                        <span class="badge bg-gradient bg-danger text-uppercase px-2 py-1 fs-7">PRO MAX</span>
-                    </div>
-                    <small class="text-muted fs-7">Hệ thống quản lý dịch vụ cày thuê Roblox & Kho Script Cyberpunk</small>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary shadow-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand fs-3" href="#"><i class="fa-solid fa-gamepad me-2"></i>BLOX FRUIT MANAGER <span class="text-pink fs-6" style="color: var(--neon-pink);">ULTRA</span></a>
+            <div class="d-flex">
+                <span class="badge bg-dark border border-info text-info p-2 align-self-center"><i class="fa-solid fa-circle-user me-1"></i> Admin Manager</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container my-4">
+        
+        <!-- Dashboard Thống kê -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div class="card card-custom stat-card p-3">
+                    <h6 class="text-muted text-uppercase">Tổng số đơn hàng</h6>
+                    <h3 id="totalOrders" class="fw-bold text-white mb-0">0</h3>
                 </div>
             </div>
-
-            <!-- Tabs Switcher -->
-            <ul class="nav nav-pills-custom" id="mainTab" role="tablist">
-                <li class="nav-item">
-                    <button class="nav-link active" id="orders-tab" data-bs-toggle="pill" data-bs-target="#orders-pane"><i class="fa-solid fa-list-check me-2"></i>Quản Lý Đơn Hàng</button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" id="scripts-tab" data-bs-toggle="pill" data-bs-target="#scripts-pane"><i class="fa-solid fa-terminal me-2"></i>Kho Script VIP</button>
-                </li>
-            </ul>
+            <div class="col-md-4">
+                <div class="card card-custom stat-card p-3" style="border-left-color: var(--neon-pink);">
+                    <h6 class="text-muted text-uppercase">Đơn đang thực hiện</h6>
+                    <h3 id="activeOrders" class="fw-bold text-white mb-0">0</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-custom stat-card p-3" style="border-left-color: #198754;">
+                    <h6 class="text-muted text-uppercase">Tổng Doanh Thu (Hoàn thành)</h6>
+                    <h3 id="totalRevenue" class="fw-bold text-success mb-0">0 VNĐ</h3>
+                </div>
+            </div>
         </div>
 
-        <!-- Main Tab Contents -->
-        <div class="tab-content" id="mainTabContent">
+        <!-- Tabs Chức năng -->
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active fw-bold px-4 me-2" id="pills-orders-tab" data-bs-toggle="pill" data-bs-target="#pills-orders" type="button"><i class="fa-solid fa-list-check me-2"></i>Quản lý Đơn cày</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link fw-bold px-4" id="pills-scripts-tab" data-bs-toggle="pill" data-bs-target="#pills-scripts" type="button"><i class="fa-solid fa-code me-2"></i>Kho Script Game</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
             
-            <!-- TAB 1: QUẢN LÝ ĐƠN HÀNG -->
-            <div class="tab-pane fade show active" id="orders-pane">
-                
-                <!-- Stat Cards Grid -->
-                <div class="row g-3 mb-4">
-                    <div class="col-6 col-md-3">
-                        <div class="glass-card p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="form-label-custom">TỔNG ĐƠN HÀNG</div>
-                                    <h3 class="fw-bold mb-0 text-white" id="stat-total">0</h3>
-                                </div>
-                                <div class="stat-icon bg-primary bg-opacity-10 text-primary">
-                                    <i class="fa-solid fa-cubes"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="glass-card p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="form-label-custom">DOANH THU THỰC</div>
-                                    <h3 class="fw-bold mb-0 text-success" id="stat-money">0 đ</h3>
-                                </div>
-                                <div class="stat-icon bg-success bg-opacity-10 text-success">
-                                    <i class="fa-solid fa-sack-dollar"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="glass-card p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="form-label-custom">ĐƠN CHỜ DUYỆT</div>
-                                    <h3 class="fw-bold mb-0 text-warning" id="stat-pending">0</h3>
-                                </div>
-                                <div class="stat-icon bg-warning bg-opacity-10 text-warning">
-                                    <i class="fa-solid fa-hourglass-half"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="glass-card p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="form-label-custom">ĐANG CÀY THUÊ</div>
-                                    <h3 class="fw-bold mb-0 text-info" id="stat-working">0</h3>
-                                </div>
-                                <div class="stat-icon bg-info bg-opacity-10 text-info">
-                                    <i class="fa-solid fa-bolt"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Form Add Order -->
-                <div class="glass-card p-4 mb-4">
-                    <h6 class="fw-bold text-white mb-3 d-flex align-items-center gap-2">
-                        <i class="fa-solid fa-circle-plus text-primary"></i> Tạo Đơn Cày Thuê Mới
-                    </h6>
-                    <form id="orderForm" class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label-custom">Tài Khoản Roblox (TK) *</label>
-                            <input type="text" class="form-control form-control-custom" id="username" required placeholder="Tên đăng nhập / Email">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label-custom">Mật Khẩu (MK) *</label>
-                            <input type="text" class="form-control form-control-custom" id="password" required placeholder="Mật khẩu Roblox">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label-custom">Mã 2FA / Backup</label>
-                            <input type="text" class="form-control form-control-custom" id="two_fa" placeholder="VD: 123456">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label-custom">Giá Tiền (VNĐ) *</label>
-                            <input type="number" class="form-control form-control-custom" id="price" required placeholder="VD: 100000">
-                        </div>
-                        <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-neon-primary w-100"><i class="fa-solid fa-plus me-1"></i> Lưu Đơn</button>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label-custom">Chi Tiết Yêu Cầu Cày Thuê *</label>
-                            <input type="text" class="form-control form-control-custom" id="content" required placeholder="VD: Up Max level 2550 + Săn Cursed Dual Katana + Lấy Soul Guitar">
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Orders Table -->
-                <div class="glass-card overflow-hidden">
-                    <div class="p-3 d-flex flex-column flex-md-row justify-content-between align-items-center border-bottom border-secondary border-opacity-25 gap-2">
-                        <h6 class="fw-bold text-white mb-0"><i class="fa-solid fa-table text-primary me-2"></i> Danh Sách Đơn Cày Thuê</h6>
-                        <!-- Filter Buttons -->
-                        <div class="btn-group btn-group-sm" id="filterGroup">
-                            <button class="btn btn-outline-secondary active" onclick="filterOrders('Tất cả')">Tất cả</button>
-                            <button class="btn btn-outline-warning" onclick="filterOrders('Chờ duyệt')">Chờ duyệt</button>
-                            <button class="btn btn-outline-info" onclick="filterOrders('Đang cày')">Đang cày</button>
-                            <button class="btn btn-outline-success" onclick="filterOrders('Hoàn thành')">Hoàn thành</button>
-                            <button class="btn btn-outline-danger" onclick="filterOrders('Đã hủy')">Đã hủy</button>
-                        </div>
+            <!-- Tab 1: Quản lý Đơn hàng -->
+            <div class="tab-pane fade show active" id="pills-orders" role="tabpanel">
+                <div class="card card-custom p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 style="color: var(--neon-cyan);" class="mb-0"><i class="fa-solid fa-clipboard-list me-2"></i>Danh sách đơn cày thuê</h4>
+                        <button class="btn btn-cyber" data-bs-toggle="modal" data-bs-target="#orderModal"><i class="fa-solid fa-plus me-1"></i> Thêm đơn mới</button>
                     </div>
                     
                     <div class="table-responsive">
-                        <table class="table custom-table text-center align-middle">
+                        <table class="table table-dark-custom table-hover align-middle">
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Tài khoản / Mật khẩu</th>
-                                    <th>Mã 2FA</th>
-                                    <th class="text-start">Chi tiết đơn hàng</th>
+                                    <th>Khách hàng</th>
+                                    <th>Dịch vụ cày</th>
                                     <th>Giá tiền</th>
                                     <th>Trạng thái</th>
                                     <th>Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody id="orderTableBody">
-                                <!-- Data rendered via JS -->
+                                <!-- Dữ liệu đơn hàng sẽ load tự động bằng JS -->
                             </tbody>
                         </table>
                     </div>
                 </div>
-
             </div>
 
-            <!-- TAB 2: KHO SCRIPT BLOX FRUIT -->
-            <div class="tab-pane fade" id="scripts-pane">
-                <div class="row g-4">
-                    
-                    <!-- Realkid Main -->
-                    <div class="col-md-6">
-                        <div class="glass-card p-4 h-100">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="fw-bold text-info mb-0"><i class="fa-solid fa-code me-2"></i> Realkid Main</h6>
-                                <button class="btn btn-sm btn-outline-info rounded-pill" onclick="copyScript('script-realkid-main')"><i class="fa-regular fa-copy me-1"></i> Copy Script</button>
+            <!-- Tab 2: Kho Script -->
+            <div class="tab-pane fade" id="pills-scripts" role="tabpanel">
+                <div class="card card-custom p-4">
+                    <h4 style="color: var(--neon-cyan);" class="mb-3"><i class="fa-solid fa-terminal me-2"></i>Tổng hợp Script Blox Fruit VIP</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-dark border border-secondary rounded">
+                                <h5 class="text-warning">Redz Hub (Auto Farm, Boss, Chest)</h5>
+                                <p class="small text-muted mb-2">Hỗ trợ cực mượt cho cả bản Android/UGPhone và PC.</p>
+                                <div class="script-box p-2 mb-2 small text-break">loadstring(game:HttpGet("https://raw.githubusercontent.com/newoh/RedzHub/main/Loader.lua"))()</div>
+                                <button class="btn btn-sm btn-outline-info" onclick="copyScript(this)"><i class="fa-solid fa-copy me-1"></i> Copy Script</button>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label-custom">Nhập Key Realkid Main:</label>
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control form-control-custom" id="key-realkid-main" placeholder="Dán key vào đây...">
-                                    <button class="btn btn-success fw-bold px-3" onclick="upKeyRealkidMain()">Up Key</button>
-                                </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-dark border border-secondary rounded">
+                                <h5 class="text-warning">MinhDZ Hub (Custom Script)</h5>
+                                <p class="small text-muted mb-2">Script tối ưu hóa riêng chuyên cày thuê siêu tốc.</p>
+                                <div class="script-box p-2 mb-2 small text-break">loadstring(game:HttpGet("https://raw.githubusercontent.com/imnotminh744/minhdz/main/script.lua"))()</div>
+                                <button class="btn btn-sm btn-outline-info" onclick="copyScript(this)"><i class="fa-solid fa-copy me-1"></i> Copy Script</button>
                             </div>
-                            <pre><code id="script-realkid-main">getgenv().Key = ""
-loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/main.lua"))()</code></pre>
                         </div>
                     </div>
-
-                    <!-- Realkid Kaitun -->
-                    <div class="col-md-6">
-                        <div class="glass-card p-4 h-100">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="fw-bold text-warning mb-0"><i class="fa-solid fa-fire me-2"></i> Realkid Kaitun (Dual Config)</h6>
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-outline-warning rounded-pill" onclick="copyScript('script-realkid-kaitun-1')">Copy GodMax</button>
-                                    <button class="btn btn-sm btn-outline-warning rounded-pill" onclick="copyScript('script-realkid-kaitun-2')">Copy Godhuman</button>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label-custom">Nhập Key Chung (Áp dụng cho cả 2 Config):</label>
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control form-control-custom" id="key-realkid-kaitun-chung" placeholder="Dán key kaitun vào đây...">
-                                    <button class="btn btn-warning text-dark fw-bold px-3" onclick="upKeyRealkidKaitunAll()">Up Key Chung</button>
-                                </div>
-                            </div>
-                            
-                            <label class="form-label-custom text-info">Config 1: GodMax</label>
-                            <pre class="mb-3"><code id="script-realkid-kaitun-1">getgenv().Configs = {
-    ["Key"] = ""; -- Để trống để dùng key đã lưu hoặc nhập qua UI
-    ["Quest"] = {
-      
-    };
-    Sword = {
-
-    };
-    Gun = {
-  
-    };
-    ["Auto Active Race V4"] = true;
-    ["FPS Limit"] = 60;
-    ["Boost FPS"] = true;
-    ["Hop Near"] = {Enabled = false; Distance = 500;};-- Hop khi có người chơi khác ở gần i'm gay
-    ["Webhook"] = {
-        ["URL"] = ""; -- Discord webhook URL; để trống để tắt
-        ["Interval"] = 300; -- Gửi báo cáo mỗi 300 giây
-    };
-};
-loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/kaitun.lua"))()</code></pre>
-
-                            <label class="form-label-custom text-info">Config 2: Godhuman Cdk Skull guitar and Pull lever</label>
-                            <pre><code id="script-realkid-kaitun-2">getgenv().Configs = {
-    ["Key"] = ""; -- Để trống để dùng key đã lưu hoặc nhập qua UI
-    ["Quest"] = {
-        ["Evo Race V1"] = true;
-        ["Evo Race V2"] = true;
-     
-        ["Pull Lerver"] = true;
-    };
-    Sword = {
-      
-        "Yama";
-        "Tushita";
-        "Cursed Dual Katana";
-    };
-    Gun = {
-        "Skull Guitar";
-
-    };
-    ["Auto Active Race V4"] = true;
-    ["FPS Limit"] = 60;
-    ["Boost FPS"] = true;
-    ["Hop Near"] = {Enabled = false; Distance = 500;};-- Hop khi có người chơi khác ở gần i'm gay
-    ["Webhook"] = {
-        ["URL"] = ""; -- Discord webhook URL; để trống để tắt
-        ["Interval"] = 300; -- Gửi báo cáo mỗi 300 giây
-    };
-};
-loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/kaitun.lua"))()</code></pre>
-                        </div>
-                    </div>
-
-                    <!-- Night Hub Main -->
-                    <div class="col-md-6">
-                        <div class="glass-card p-4 h-100">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="fw-bold text-success mb-0"><i class="fa-solid fa-moon me-2"></i> Night Hub Main (Key Free)</h6>
-                                <button class="btn btn-sm btn-outline-success rounded-pill" onclick="copyScript('script-nighthub-main')"><i class="fa-regular fa-copy me-1"></i> Copy Script</button>
-                            </div>
-                            <pre><code id="script-nighthub-main">script_key = "" -- default is FREEMIUM
-loadstring(game:HttpGet("https://raw.githubusercontent.com/WhiteX1208/Scripts/refs/heads/main/BF-Main.luau"))()</code></pre>
-                        </div>
-                    </div>
-
-                    <!-- Night Hub Hop Boss -->
-                    <div class="col-md-6">
-                        <div class="glass-card p-4 h-100">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="fw-bold text-success mb-0"><i class="fa-solid fa-ghost me-2"></i> Night Hub Hop Boss</h6>
-                                <button class="btn btn-sm btn-outline-success rounded-pill" onclick="copyScript('script-nighthub-hop')"><i class="fa-regular fa-copy me-1"></i> Copy Script</button>
-                            </div>
-                            <pre><code id="script-nighthub-hop">getgenv().Team = "Marines" -- Marnies
-loadstring(game:HttpGet("https://raw.githubusercontent.com/WhiteX1208/Scripts/refs/heads/main/HopScript.luau"))()</code></pre>
-                        </div>
-                    </div>
-
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Modal Thêm đơn hàng -->
+    <div class="modal fade" id="orderModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content card-custom text-white">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title" style="color: var(--neon-cyan);">Tạo đơn hàng mới</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="orderForm">
+                        <div class="mb-3">
+                            <label class="form-label">Tên Khách Hàng / Discord</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" id="clientName" required placeholder="Nhập tên khách...">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Gói Cày Thuê (Level, Godhuman, v.v.)</label>
+                            <input type="text" class="form-control bg-dark text-white border-secondary" id="servicePackage" required placeholder="Ví dụ: Cày từ 1 đến Max Level">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Giá tiền (VNĐ)</label>
+                            <input type="number" class="form-control bg-dark text-white border-secondary" id="price" required placeholder="Ví dụ: 150000">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Trạng thái đơn</label>
+                            <select class="form-select bg-dark text-white border-secondary" id="status">
+                                <option value="Chờ duyệt">Chờ duyệt</option>
+                                <option value="Đang cày">Đang cày</option>
+                                <option value="Hoàn thành">Hoàn thành</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-cyber w-100 py-2">Lưu Đơn Hàng</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- App Logic JavaScript -->
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Script Quản lý logic & LocalStorage -->
     <script>
-        let orders = JSON.parse(localStorage.getItem('blox_orders_v2')) || [
-            { id: 101, username: 'pro_player99', password: 'password123!', two_fa: '882910', content: 'Up level 1500 -> 2550 + Mua Godhuman', price: 120000, status: 'Hoàn thành' },
-            { id: 102, username: 'dragon_slayer_v4', password: 'RobloxSuperVip99', two_fa: 'AFEX-9921', content: 'Săn Cursed Dual Katana + Vá Tộc Rồng Thần', price: 250000, status: 'Đang cày' },
-            { id: 103, username: 'bloxfruit_master', password: 'KyPasSword888', two_fa: '', content: 'Cày 10.000.000 Beli + Mở Haki VQ KN', price: 80000, status: 'Chờ duyệt' }
+        let orders = JSON.parse(localStorage.getItem('bloxfruit_orders')) || [
+            { id: 1, client: "MinhDZ", service: "Max Level 2550 + Soul Guitar", price: 120000, status: "Đang cày" }
         ];
 
-        let currentFilter = 'Tất cả';
-
-        function saveAndRender() {
-            localStorage.setItem('blox_orders_v2', JSON.stringify(orders));
-            renderOrders();
-            updateStats();
-        }
-
-        function updateStats() {
-            document.getElementById('stat-total').innerText = orders.length;
-            
-            // Tính tổng tiền các đơn ở trạng thái Hoàn thành
-            let totalMoney = orders
-                .filter(o => o.status === 'Hoàn thành')
-                .reduce((sum, o) => sum + Number(o.price), 0);
-            
-            document.getElementById('stat-money').innerText = totalMoney.toLocaleString('vi-VN') + ' đ';
-            document.getElementById('stat-pending').innerText = orders.filter(o => o.status === 'Chờ duyệt').length;
-            document.getElementById('stat-working').innerText = orders.filter(o => o.status === 'Đang cày').length;
-        }
+        const orderTableBody = document.getElementById('orderTableBody');
+        const orderForm = document.getElementById('orderForm');
 
         function renderOrders() {
-            let tbody = document.getElementById('orderTableBody');
-            tbody.innerHTML = '';
+            orderTableBody.innerHTML = '';
+            let totalRev = 0;
+            let activeCount = 0;
 
-            let filtered = currentFilter === 'Tất cả' ? orders : orders.filter(o => o.status === currentFilter);
+            orders.forEach((order, index) => {
+                if(order.status === 'Hoàn thành') totalRev += Number(order.price);
+                if(order.status === 'Đang cày' || order.status === 'Chờ duyệt') activeCount++;
 
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">Chưa có đơn hàng nào trong danh mục này.</td></tr>`;
-                return;
-            }
-
-            filtered.forEach(o => {
                 let badgeClass = 'badge-pending';
-                if (o.status === 'Đang cày') badgeClass = 'badge-working';
-                else if (o.status === 'Hoàn thành') badgeClass = 'badge-completed';
-                else if (o.status === 'Đã hủy') badgeClass = 'badge-cancelled';
+                if(order.status === 'Đang cày') badgeClass = 'badge-doing';
+                if(order.status === 'Hoàn thành') badgeClass = 'badge-done';
 
-                let tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="fw-bold text-muted">#${o.id}</td>
-                    <td>
-                        <div class="d-flex flex-column align-items-center gap-1">
-                            <span class="credential-box"><i class="fa-solid fa-user me-1 text-primary"></i>${o.username} <i class="fa-regular fa-copy ms-1 text-muted cursor-pointer" onclick="copyText('${o.username}')"></i></span>
-                            <span class="credential-box"><i class="fa-solid fa-key me-1 text-warning"></i>${o.password} <i class="fa-regular fa-copy ms-1 text-muted cursor-pointer" onclick="copyText('${o.password}')"></i></span>
-                        </div>
-                    </td>
-                    <td><span class="${o.two_fa ? 'credential-box text-danger' : 'text-muted fs-7'}">${o.two_fa || 'Không có'}</span></td>
-                    <td class="text-start fw-semibold text-light">${o.content}</td>
-                    <td class="fw-bold text-success fs-6">${Number(o.price).toLocaleString('vi-VN')} đ</td>
-                    <td><span class="badge-status ${badgeClass}">${o.status}</span></td>
-                    <td>
-                        <div class="d-flex justify-content-center gap-1">
-                            <button class="btn btn-action-icon btn-outline-info" onclick="updateStatus(${o.id}, 'Đang cày')" title="Nhận cày"><i class="fa-solid fa-play"></i></button>
-                            <button class="btn btn-action-icon btn-outline-success" onclick="updateStatus(${o.id}, 'Hoàn thành')" title="Hoàn thành & Cộng tiền"><i class="fa-solid fa-check"></i></button>
-                            <button class="btn btn-action-icon btn-outline-warning" onclick="updateStatus(${o.id}, 'Đã hủy')" title="Hủy đơn"><i class="fa-solid fa-ban"></i></button>
-                            <button class="btn btn-action-icon btn-outline-danger" onclick="deleteOrder(${o.id})" title="Xóa đơn"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </td>
+                let row = `
+                    <tr>
+                        <td>#${index + 1}</td>
+                        <td class="fw-bold">${order.client}</td>
+                        <td>${order.service}</td>
+                        <td class="text-success fw-bold">${Number(order.price).toLocaleString()} VNĐ</td>
+                        <td><span class="badge ${badgeClass}">${order.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteOrder(${index})"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
                 `;
-                tbody.appendChild(tr);
+                orderTableBody.innerHTML += row;
             });
+
+            document.getElementById('totalOrders').innerText = orders.length;
+            document.getElementById('activeOrders').innerText = activeCount;
+            document.getElementById('totalRevenue').innerText = totalRev.toLocaleString() + ' VNĐ';
+
+            localStorage.setItem('bloxfruit_orders', JSON.stringify(orders));
         }
 
-        document.getElementById('orderForm').addEventListener('submit', function(e) {
+        orderForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            let newOrder = {
-                id: orders.length > 0 ? Math.max(...orders.map(o => o.id)) + 1 : 101,
-                username: document.getElementById('username').value.trim(),
-                password: document.getElementById('password').value.trim(),
-                two_fa: document.getElementById('two_fa').value.trim(),
-                price: Number(document.getElementById('price').value),
-                content: document.getElementById('content').value.trim(),
-                status: 'Chờ duyệt'
+            const newOrder = {
+                client: document.getElementById('clientName').value,
+                service: document.getElementById('servicePackage').value,
+                price: document.getElementById('price').value,
+                status: document.getElementById('status').value
             };
-            orders.unshift(newOrder);
-            saveAndRender();
-            this.reset();
+            orders.push(newOrder);
+            renderOrders();
+            orderForm.reset();
+            bootstrap.Modal.getInstance(document.getElementById('orderModal')).hide();
         });
 
-        function updateStatus(id, newStatus) {
-            let order = orders.find(o => Number(o.id) === Number(id));
-            if (order) {
-                order.status = newStatus;
-                saveAndRender();
+        function deleteOrder(index) {
+            if(confirm('Bạn có chắc muốn xóa đơn này không?')) {
+                orders.splice(index, 1);
+                renderOrders();
             }
         }
 
-        function deleteOrder(id) {
-            if (confirm('Bạn có chắc chắn muốn xóa đơn hàng này khỏi danh sách?')) {
-                orders = orders.filter(o => Number(o.id) !== Number(id));
-                saveAndRender();
-            }
+        function copyScript(btn) {
+            const scriptText = btn.previousElementSibling.innerText;
+            navigator.clipboard.writeText(scriptText);
+            btn.innerHTML = '<i class="fa-solid fa-check me-1"></i> Đã Copy!';
+            setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-copy me-1"></i> Copy Script'; }, 2000);
         }
 
-        function filterOrders(status) {
-            currentFilter = status;
-            let buttons = document.querySelectorAll('#filterGroup button');
-            buttons.forEach(btn => {
-                if (btn.innerText.includes(status)) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            renderOrders();
-        }
-
-        // Script Up Key Functions
-        function upKeyRealkidMain() {
-            let key = document.getElementById('key-realkid-main').value.trim();
-            document.getElementById('script-realkid-main').innerText = `getgenv().Key = "${key}"\nloadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/main.lua"))()`;
-            alert('Đã cập nhật Key vào Realkid Main!');
-        }
-
-        function upKeyRealkidKaitunAll() {
-            let key = document.getElementById('key-realkid-kaitun-chung').value.trim();
-            
-            document.getElementById('script-realkid-kaitun-1').innerText = `getgenv().Configs = {
-    ["Key"] = "${key}";
-    ["Quest"] = {
-      
-    };
-    Sword = {
-
-    };
-    Gun = {
-  
-    };
-    ["Auto Active Race V4"] = true;
-    ["FPS Limit"] = 60;
-    ["Boost FPS"] = true;
-    ["Hop Near"] = {Enabled = false; Distance = 500;};
-    ["Webhook"] = {
-        ["URL"] = ""; 
-        ["Interval"] = 300; 
-    };
-};
-loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/kaitun.lua"))()`;
-
-            document.getElementById('script-realkid-kaitun-2').innerText = `getgenv().Configs = {
-    ["Key"] = "${key}";
-    ["Quest"] = {
-        ["Evo Race V1"] = true;
-        ["Evo Race V2"] = true;
-     
-        ["Pull Lerver"] = true;
-    };
-    Sword = {
-      
-        "Yama";
-        "Tushita";
-        "Cursed Dual Katana";
-    };
-    Gun = {
-        "Skull Guitar";
-
-    };
-    ["Auto Active Race V4"] = true;
-    ["FPS Limit"] = 60;
-    ["Boost FPS"] = true;
-    ["Hop Near"] = {Enabled = false; Distance = 500;};
-    ["Webhook"] = {
-        ["URL"] = ""; 
-        ["Interval"] = 300; 
-    };
-};
-loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/kaitun.lua"))()`;
-
-            alert('Đã cập nhật Key chung vào cả 2 Config Realkid Kaitun thành công!');
-        }
-
-        function copyScript(elementId) {
-            let text = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Đã sao chép mã script vào bộ nhớ tạm!');
-            });
-        }
-
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Đã sao chép: ' + text);
-            });
-        }
-
-        // Init Run
-        saveAndRender();
+        renderOrders();
     </script>
 </body>
 </html>
