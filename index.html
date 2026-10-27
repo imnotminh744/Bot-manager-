@@ -193,6 +193,29 @@ tbody tr.new{animation:rowin .9s ease both}
 pre{background:rgba(7,14,26,.7);border:1px solid var(--line-soft);border-radius:14px;padding:14px;overflow:auto;font:12.5px/1.65 var(--mono);color:#c3d2e8;tab-size:2;max-height:340px}
 pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
 
+/* ===== cloudphone ===== */
+.phones{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.phone{background:var(--glass);border:1px solid var(--line);border-radius:22px;overflow:hidden;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;flex-direction:column}
+.phone>header{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line-soft)}
+.phone h3{font-size:15px;font-weight:600;margin-right:auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pst{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap}
+.pst::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--s-done)}
+.pst.off::before{background:var(--s-cancel)}
+.shot{display:grid;place-items:center;height:300px;background:rgba(7,14,26,.8);border:0;padding:0;width:100%;cursor:zoom-in;position:relative}
+.shot img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.shot.off img{filter:grayscale(.8) brightness(.6)}
+.shot span{color:var(--faint);font-size:13px}
+.pbody{padding:14px 18px 16px;display:grid;gap:12px}
+.meter small{display:flex;justify-content:space-between;font:11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.meter small b{font-weight:500;color:var(--text);letter-spacing:0}
+.bar2{height:7px;border-radius:99px;background:var(--bg);border:1px solid var(--line-soft);overflow:hidden}
+.bar2 i{display:block;height:100%;border-radius:99px;background:var(--accent);transition:width .6s}
+.bar2 i.mid{background:var(--s-pending)}
+.bar2 i.hi{background:var(--s-cancel)}
+.pfoot{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted)}
+.lb{position:fixed;inset:0;z-index:25;background:rgba(4,9,16,.9);display:grid;place-items:center;padding:20px;cursor:zoom-out}
+.lb img{max-width:100%;max-height:100%;border-radius:12px}
+
 /* ===== đăng nhập ===== */
 .gate{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:rgba(6,12,22,.74);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);overflow:auto}
 .card{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);border-radius:26px;padding:28px;box-shadow:0 30px 80px -30px rgba(0,0,0,.8);animation:fadeup .4s both}
@@ -283,6 +306,7 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
     <nav class="tabs" role="tablist">
       <button class="tab" role="tab" id="tab-orders" aria-selected="true" data-tab="orders">Đơn hàng</button>
       <button class="tab" role="tab" id="tab-scripts" aria-selected="false" data-tab="scripts">Kho script</button>
+      <button class="tab" role="tab" id="tab-phones" aria-selected="false" data-tab="phones">Cloudphone</button>
     </nav>
     <div class="acct" id="acct" hidden>
       <span class="sync" id="sync" data-s="ok">Đã đồng bộ</span>
@@ -340,6 +364,12 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
   </section>
 
   <section id="view-scripts" class="scripts" hidden></section>
+
+  <section id="view-phones" hidden>
+    <h2>Trạng thái Cloudphone</h2>
+    <div class="phones" id="phones"></div>
+    <div class="empty" id="phones-empty" hidden><b>Chưa có cloudphone nào báo cáo</b><span id="phones-empty-sub"></span></div>
+  </section>
 </main>
 
 <div class="gate" id="gate" hidden>
@@ -456,7 +486,8 @@ function createLocalStore() {
   const persist = () => { save('bfm_orders_v2', list); emit(); };
   return {
     mode: 'local',
-    onOrders(f) { cb.orders = f; }, onKeys(f) { cb.keys = f; }, onSync() {},
+    onOrders(f) { cb.orders = f; }, onKeys(f) { cb.keys = f; }, onSync() {}, onPhones() {},
+    removePhone() {},
     start() { emit(); cb.keys && cb.keys(keys); },
     stop() {},
     add(data) {
@@ -499,8 +530,12 @@ async function createCloud() {
     const sync = s => cb.sync && cb.sync(s);
     return {
       mode: 'cloud', user, name: niceName(user),
-      onOrders(f) { cb.orders = f; }, onKeys(f) { cb.keys = f; }, onSync(f) { cb.sync = f; },
+      onOrders(f) { cb.orders = f; }, onKeys(f) { cb.keys = f; }, onSync(f) { cb.sync = f; }, onPhones(f) { cb.phones = f; },
+      removePhone(id) { F.deleteDoc(F.doc(db, 'users', uid, 'phones', id)).catch(e => toast('Không xóa được: ' + (e.code || e.message))); },
       start() {
+        unsubs.push(F.onSnapshot(F.collection(db, 'users', uid, 'phones'), snap => {
+          cb.phones && cb.phones(snap.docs.map(d => ({ ...d.data(), id: d.id })));
+        }, () => {}));
         unsubs.push(F.onSnapshot(F.query(col, F.orderBy('at', 'desc')), { includeMetadataChanges: true }, snap => {
           const m = snap.metadata;
           sync(m.hasPendingWrites ? 'pending' : (m.fromCache ? (navigator.onLine ? 'pending' : 'offline') : 'ok'));
@@ -579,7 +614,7 @@ let legacy = [];
 
 /* ----- tab ----- */
 function showTab(name) {
-  ['orders', 'scripts'].forEach(n => {
+  ['orders', 'scripts', 'phones'].forEach(n => {
     $('#view-' + n).hidden = n !== name;
     $('#tab-' + n).setAttribute('aria-selected', String(n === name));
   });
@@ -874,6 +909,59 @@ function refreshKeys() {
   });
 }
 
+/* ----- cloudphone ----- */
+let phones = [];
+const PHONE_STALE_MS = 12 * 60 * 1000; /* báo cáo mỗi 5 phút, quá 12 phút = mất kết nối */
+
+function ago(ms) {
+  const s = Math.max(0, Math.round((Date.now() - ms) / 1000));
+  if (s < 60) return s + ' giây trước';
+  const m = Math.round(s / 60);
+  if (m < 60) return m + ' phút trước';
+  const hr = Math.floor(m / 60);
+  return hr < 24 ? hr + ' giờ trước' : Math.floor(hr / 24) + ' ngày trước';
+}
+function meter(label, pct, extra) {
+  const p = Math.max(0, Math.min(100, Number(pct) || 0));
+  return h('div', { class: 'meter' },
+    h('small', {}, label, h('b', { text: Math.round(p) + '%' + (extra ? ' · ' + extra : '') })),
+    h('div', { class: 'bar2' }, h('i', { class: p > 85 ? 'hi' : p > 65 ? 'mid' : '', style: 'width:' + p + '%' })));
+}
+function openShot(src) {
+  const lb = h('div', { class: 'lb', onclick() { lb.remove(); } }, h('img', { src, alt: 'Ảnh màn hình cloudphone' }));
+  document.body.append(lb);
+}
+function renderPhones() {
+  const root = $('#phones');
+  const list = phones.slice().sort((a, b) => String(a.name || a.id).localeCompare(String(b.name || b.id), 'vi', { numeric: true }));
+  const frag = document.createDocumentFragment();
+  list.forEach(p => {
+    const on = p.updated && Date.now() - p.updated < PHONE_STALE_MS;
+    const shot = h('button', { class: 'shot' + (on ? '' : ' off'), type: 'button', 'aria-label': 'Phóng to ảnh màn hình' });
+    if (p.shot) { shot.append(h('img', { src: p.shot, alt: '' })); shot.addEventListener('click', () => openShot(p.shot)); }
+    else shot.append(h('span', { text: 'Chưa có ảnh' }));
+    const ramExtra = p.ramTotal ? fmt.format(Math.round(p.ramUsed || 0)) + '/' + fmt.format(Math.round(p.ramTotal)) + ' MB' : '';
+    frag.append(h('article', { class: 'phone' },
+      h('header', {}, h('h3', { text: p.name || p.id, title: p.name || p.id }),
+        h('span', { class: 'pst' + (on ? '' : ' off'), text: on ? 'Hoạt động' : 'Mất kết nối' })),
+      shot,
+      h('div', { class: 'pbody' },
+        meter('CPU', p.cpu), meter('RAM', p.ram, ramExtra),
+        h('div', { class: 'pfoot' },
+          h('span', { text: p.updated ? 'Cập nhật ' + ago(p.updated) : 'Chưa cập nhật' }),
+          h('button', { class: 'del', type: 'button', title: 'Xóa thiết bị khỏi danh sách', 'aria-label': 'Xóa thiết bị', text: '×', onclick() {
+            if (confirm('Xóa "' + (p.name || p.id) + '" khỏi danh sách? (agent sẽ tự tạo lại nếu vẫn đang chạy)')) store.removePhone(p.id);
+          } })))));
+  });
+  root.replaceChildren(frag);
+  const cloud = store && store.mode === 'cloud';
+  $('#phones-empty').hidden = list.length > 0;
+  $('#phones-empty-sub').textContent = cloud
+    ? 'Chạy cloudphone-agent.py trên cloudphone (xem README), thiết bị sẽ tự xuất hiện sau vài giây.'
+    : 'Tính năng này cần đăng nhập Firebase (điền firebase-config.js, xem README).';
+}
+setInterval(() => { if (!document.hidden && phones.length) renderPhones(); }, 30000);
+
 /* ----- trạng thái đồng bộ ----- */
 const SYNC_TEXT = { ok: 'Đã đồng bộ', pending: 'Đang đồng bộ…', offline: 'Ngoại tuyến', error: 'Lỗi đồng bộ', local: 'Lưu trên máy này' };
 let lastSync = 'ok';
@@ -895,15 +983,16 @@ function attach(s) {
     if (first) renderNotice();
   });
   s.onKeys(k => { keys = { ...k }; refreshKeys(); });
+  s.onPhones(list => { phones = list; renderPhones(); });
   s.onSync(setSync);
   legacy = s.mode === 'cloud' ? readLegacy() : [];
-  renderNotice();
+  renderNotice(); renderPhones();
   s.start();
 }
 function detach() {
   if (store) store.stop();
-  store = null; orders = []; keys = {}; legacy = [];
-  render(); refreshKeys(); renderNotice();
+  store = null; orders = []; keys = {}; legacy = []; phones = [];
+  render(); refreshKeys(); renderNotice(); renderPhones();
 }
 
 /* ----- hộp đăng nhập ----- */
