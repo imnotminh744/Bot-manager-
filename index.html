@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Blox Fruit Manager</title>
+<title>Order Manager</title>
 <meta name="description" content="Quản lý đơn cày thuê Roblox và kho script Blox Fruit">
 <meta name="theme-color" content="#0a1424">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'%3E%3Cpath fill='%233b9cff' d='M14 112C14 70 70 38 150 40C230 42 285 78 335 80C350 62 372 52 392 54C384 70 372 80 360 86C374 96 388 112 392 130C372 128 352 118 336 100C290 140 220 168 150 166C70 164 14 150 14 112Z'/%3E%3C/svg%3E">
@@ -42,7 +42,7 @@ button{cursor:pointer}
 button:disabled{opacity:.6;cursor:default}
 .wrap{max-width:1280px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
 [hidden]{display:none!important}
-
+ 
 /* ===== biển ===== */
 .sea{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
 .whale{position:absolute;color:var(--accent);will-change:transform}
@@ -66,7 +66,7 @@ button:disabled{opacity:.6;cursor:default}
   background:radial-gradient(circle at 30% 30%,rgba(160,210,255,.2),transparent 60%);animation:rise linear infinite}
 @keyframes rise{0%{transform:translate(0,0);opacity:0}10%{opacity:1}90%{opacity:.7}100%{transform:translate(28px,-115vh);opacity:0}}
 .paused *,.paused *::before{animation-play-state:paused!important}
-
+ 
 /* ===== thanh trên ===== */
 .top{position:sticky;top:0;z-index:5;background:rgba(10,20,36,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
 .bar{display:flex;align-items:center;gap:16px;height:64px}
@@ -86,7 +86,7 @@ button:disabled{opacity:.6;cursor:default}
 .sync[data-s="offline"]{--c:var(--faint)}
 .sync[data-s="error"]{--c:var(--s-cancel)}
 .sync[data-s="local"]{--c:var(--accent)}
-
+ 
 /* ===== thống kê ===== */
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding-top:22px}
 .stat{background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:16px 22px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fadeup .6s both}
@@ -96,14 +96,14 @@ button:disabled{opacity:.6;cursor:default}
 .stat.money strong{color:var(--accent)}
 .stat strong i{font-style:normal;font-size:16px;color:var(--muted);margin-left:4px;letter-spacing:0}
 @keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-
+ 
 /* ===== bố cục ===== */
 main.wrap{padding-top:28px;padding-bottom:80px}
 .grid{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start}
 .grid>div{min-width:0}
 #view-orders:not([hidden]),#view-scripts:not([hidden]){animation:fadeup .4s ease both}
 h2{font:600 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
-
+ 
 /* ===== form ===== */
 .form,.tbl,.sgroup{background:var(--glass);border:1px solid var(--line);border-radius:22px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .form{padding:24px;position:sticky;top:84px;transition:border-color .2s,box-shadow .2s}
@@ -128,11 +128,11 @@ textarea.inp{resize:vertical;min-height:84px}
 .ghost.ok{border-color:var(--s-done);color:var(--s-done)}
 .ghost.solid{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
 .ghost.solid:hover:not(:disabled){background:var(--accent);filter:brightness(1.1)}
-
+ 
 /* ===== thông báo nhập dữ liệu ===== */
 .notice{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:12px 18px;margin-bottom:14px;border:1px solid #2a5384;background:rgba(59,156,255,.08);border-radius:18px;font-size:14px}
 .notice div{display:flex;gap:8px}
-
+ 
 /* ===== lọc + tìm ===== */
 .toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;align-items:center}
 .filters{display:flex;flex-wrap:wrap;gap:6px}
@@ -141,7 +141,7 @@ textarea.inp{resize:vertical;min-height:84px}
 .chip[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
 .chip b{font:500 11px var(--mono);opacity:.7}
 .search{flex:1 1 180px;min-width:160px;border-radius:99px;padding:7px 16px;font-size:14px}
-
+ 
 /* ===== bảng ===== */
 .tbl{overflow:auto}
 table{width:100%;border-collapse:collapse;min-width:760px}
@@ -158,7 +158,20 @@ tbody tr:hover{background:#112038}
 .cred button{background:none;border:0;color:var(--muted);font:11px var(--mono);padding:1px 7px;border-radius:99px;transition:color .15s,background .15s}
 .cred button:hover{color:var(--accent);background:var(--raise)}
 .dash{color:var(--faint)}
-.detail{max-width:260px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;overflow-wrap:anywhere}
+.detail{max-width:260px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;overflow-wrap:anywhere;cursor:pointer;border-radius:8px;transition:color .15s}
+.detail:hover{color:var(--accent)}
+.detail:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+td.c-cred{min-width:190px}
+td.c-tfa{max-width:170px}
+td.c-tfa .v{word-break:break-all}
+.dlg{position:fixed;inset:0;z-index:25;background:rgba(4,9,16,.8);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:grid;place-items:center;padding:20px}
+.dlg-card{width:100%;max-width:520px;max-height:86vh;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:24px;box-shadow:0 30px 80px -30px rgba(0,0,0,.8);animation:fadeup .25s both}
+.dlg-card>header{display:flex;align-items:center;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line-soft)}
+.dlg-card h3{font-size:15px;font-weight:600;margin-right:auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dlg-body{padding:18px 20px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;font-size:15px;line-height:1.6}
+.dlg-card>footer{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 20px;border-top:1px solid var(--line-soft)}
+.foot{text-align:center;color:var(--faint);font:12px var(--mono);letter-spacing:.04em;padding:8px 16px 36px;position:relative;z-index:1}
+.card .foot{padding:18px 0 0}
 .price{font:500 14px var(--mono);white-space:nowrap}
 .sel{appearance:none;-webkit-appearance:none;background-color:rgba(10,20,36,.7);border:1px solid var(--line);border-radius:99px;padding:5px 26px 5px 24px;font-size:13px;font-weight:500;cursor:pointer;outline:none;
   background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
@@ -176,7 +189,7 @@ tbody tr.new{animation:rowin .9s ease both}
 .empty{padding:56px 20px;text-align:center;color:var(--muted)}
 .empty b{display:block;color:var(--text);font-weight:500;margin-bottom:4px}
 .more{display:block;margin:0 auto;padding:14px 0 16px}
-
+ 
 /* ===== kho script ===== */
 .scripts{display:grid;gap:20px;max-width:900px}
 .sgroup{overflow:hidden}
@@ -192,7 +205,7 @@ tbody tr.new{animation:rowin .9s ease both}
 .bhead span{font-size:13px;font-weight:500}
 pre{background:rgba(7,14,26,.7);border:1px solid var(--line-soft);border-radius:14px;padding:14px;overflow:auto;font:12.5px/1.65 var(--mono);color:#c3d2e8;tab-size:2;max-height:340px}
 pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
-
+ 
 /* ===== cloudphone ===== */
 .phones{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
 .phone{background:var(--glass);border:1px solid var(--line);border-radius:22px;overflow:hidden;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;flex-direction:column}
@@ -215,7 +228,7 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
 .pfoot{display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--muted)}
 .lb{position:fixed;inset:0;z-index:25;background:rgba(4,9,16,.9);display:grid;place-items:center;padding:20px;cursor:zoom-out}
 .lb img{max-width:100%;max-height:100%;border-radius:12px}
-
+ 
 /* ===== đăng nhập ===== */
 .gate{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:rgba(6,12,22,.74);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);overflow:auto}
 .card{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);border-radius:26px;padding:28px;box-shadow:0 30px 80px -30px rgba(0,0,0,.8);animation:fadeup .4s both}
@@ -226,10 +239,10 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
 .seg button{border:0;background:none;border-radius:99px;padding:8px;color:var(--muted);font-weight:500;transition:background .15s,color .15s}
 .seg button[aria-selected="true"]{background:var(--raise);color:var(--text)}
 .err{min-height:20px;color:var(--s-cancel);font-size:13px;margin:-2px 0 10px}
-
+ 
 .toast{position:fixed;left:50%;bottom:28px;z-index:30;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--text);color:var(--bg);padding:10px 22px;border-radius:99px;font-size:14px;font-weight:500;transition:.18s;max-width:calc(100vw - 32px);text-align:center}
 .toast.on{opacity:1;transform:translate(-50%,0)}
-
+ 
 /* ===== màn hình nhỏ ===== */
 @media (max-width:900px){
   .grid{grid-template-columns:1fr}
@@ -278,7 +291,7 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
 <script src="firebase-config.js"></script>
 </head>
 <body class="booting">
-
+ 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
     <symbol id="whale" viewBox="0 0 400 200">
@@ -289,7 +302,7 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
     </symbol>
   </defs>
 </svg>
-
+ 
 <div class="sea" id="sea" aria-hidden="true">
   <div class="whale w1"><svg viewBox="0 0 400 200"><use href="#whale" transform="translate(400 0) scale(-1 1)"/></svg></div>
   <div class="whale w2"><svg viewBox="0 0 400 200"><use href="#whale"/></svg></div>
@@ -299,10 +312,10 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
     <svg class="wv b" viewBox="0 0 2880 120" preserveAspectRatio="none"><path d="M0 70C180 100 540 30 720 70C900 100 1260 30 1440 70C1620 100 1980 30 2160 70C2340 100 2700 30 2880 70V120H0Z"/></svg>
   </div>
 </div>
-
+ 
 <header class="top">
   <div class="wrap bar">
-    <div class="brand"><svg class="logo" viewBox="0 0 400 200" aria-hidden="true"><use href="#whale" transform="translate(400 0) scale(-1 1)"/></svg><b>Blox Fruit Manager</b><span>cày thuê &amp; kho script</span></div>
+    <div class="brand"><svg class="logo" viewBox="0 0 400 200" aria-hidden="true"><use href="#whale" transform="translate(400 0) scale(-1 1)"/></svg><b>Order Manager</b><span>cày thuê &amp; kho script</span></div>
     <nav class="tabs" role="tablist">
       <button class="tab" role="tab" id="tab-orders" aria-selected="true" data-tab="orders">Đơn hàng</button>
       <button class="tab" role="tab" id="tab-scripts" aria-selected="false" data-tab="scripts">Kho script</button>
@@ -315,7 +328,7 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
     </div>
   </div>
 </header>
-
+ 
 <div class="wrap">
   <section class="stats" aria-label="Thống kê">
     <div class="stat"><small>Tổng đơn</small><strong id="st-total">0</strong></div>
@@ -324,7 +337,7 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
     <div class="stat"><small>Đang cày</small><strong id="st-running">0</strong></div>
   </section>
 </div>
-
+ 
 <main class="wrap">
   <section id="view-orders" class="grid">
     <form class="form" id="form" autocomplete="off">
@@ -344,7 +357,7 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
         <textarea class="inp" id="f-detail" required placeholder="VD: Lên level max, lấy God Human…"></textarea></label>
       <button class="btn" type="submit">Lưu đơn</button>
     </form>
-
+ 
     <div>
       <h2>Danh sách đơn</h2>
       <div id="notice"></div>
@@ -362,20 +375,22 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
       </div>
     </div>
   </section>
-
+ 
   <section id="view-scripts" class="scripts" hidden></section>
-
+ 
   <section id="view-phones" hidden>
     <h2>Trạng thái Cloudphone</h2>
     <div class="phones" id="phones"></div>
     <div class="empty" id="phones-empty" hidden><b>Chưa có cloudphone nào báo cáo</b><span id="phones-empty-sub"></span></div>
   </section>
 </main>
-
+ 
+<footer class="foot">Web Made By Minh</footer>
+ 
 <div class="gate" id="gate" hidden>
   <form class="card" id="gate-form" novalidate>
     <svg class="logo" viewBox="0 0 400 200" aria-hidden="true"><use href="#whale" transform="translate(400 0) scale(-1 1)"/></svg>
-    <h1>Blox Fruit Manager</h1>
+    <h1>Order Manager</h1>
     <p class="sub">Đăng nhập để xem đơn hàng của bạn trên mọi thiết bị.</p>
     <div class="seg" role="tablist">
       <button type="button" role="tab" id="seg-login" aria-selected="true">Đăng nhập</button>
@@ -390,23 +405,24 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
       <input class="inp" id="g-confirm" type="password" autocomplete="new-password"></label>
     <div class="err" id="g-err" role="alert"></div>
     <button class="btn" id="g-submit" type="submit">Đăng nhập</button>
+    <div class="foot">Web Made By Minh</div>
   </form>
 </div>
-
+ 
 <div class="toast" id="toast" role="status"></div>
-
+ 
 <script type="module">
 /* ================================================================
-   Blox Fruit Manager
+   Order Manager
    - Có firebase-config.js hợp lệ  -> đăng nhập + dữ liệu lưu trên cloud
    - Không có                      -> lưu trên trình duyệt (localStorage)
    ================================================================ */
-
+ 
 const CFG = window.FIREBASE_CONFIG || {};
 const WANT_CLOUD = !!(CFG.apiKey && CFG.projectId);
 const FB_VER = '10.12.2';
 const FAKE_DOMAIN = '@bot-manager.local';
-
+ 
 /* ---------- tiện ích ---------- */
 const $ = (s, r) => (r || document).querySelector(s);
 function h(tag, props = {}, ...kids) {
@@ -425,7 +441,7 @@ function load(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); retur
 function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
 const fmt = new Intl.NumberFormat('vi-VN');
 const reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-
+ 
 let toastTimer;
 function toast(msg) {
   const t = $('#toast'); t.textContent = msg; t.classList.add('on');
@@ -448,7 +464,7 @@ function bindPw(btn, input) {
     input.type = show ? 'text' : 'password'; btn.textContent = show ? 'Ẩn' : 'Hiện';
   });
 }
-
+ 
 /* ---------- trạng thái đơn ---------- */
 const STATUS = [
   ['pending', 'Chờ duyệt', 'var(--s-pending)'],
@@ -458,7 +474,7 @@ const STATUS = [
 ];
 const STATUS_MAP = Object.fromEntries(STATUS.map(s => [s[0], s]));
 const VN_STATUS = Object.fromEntries(STATUS.map(s => [s[1], s[0]]));
-
+ 
 function sortOrders(list) {
   return list.slice().sort((a, b) => ((b.at || 0) - (a.at || 0)) || ((b.no || 0) - (a.no || 0)));
 }
@@ -474,7 +490,7 @@ function normLegacy(o) {
     no: Number(o.no || o.id) || 0
   };
 }
-
+ 
 /* ================================================================
    LƯU TRÊN MÁY (localStorage)
    ================================================================ */
@@ -500,7 +516,7 @@ function createLocalStore() {
     async importMany() {}
   };
 }
-
+ 
 /* ================================================================
    CLOUD (Firebase Auth + Firestore)
    ================================================================ */
@@ -517,10 +533,10 @@ async function createCloud() {
   try {
     db = F.initializeFirestore(app, { localCache: F.persistentLocalCache({ tabManager: F.persistentMultipleTabManager() }) });
   } catch (e) { db = F.getFirestore(app); }
-
+ 
   const toEmail = n => { n = n.trim().toLowerCase(); return n.includes('@') ? n : n + FAKE_DOMAIN; };
   const niceName = u => (u.email || '').replace(FAKE_DOMAIN, '');
-
+ 
   function makeStore(user) {
     const uid = user.uid;
     const col = F.collection(db, 'users', uid, 'orders');
@@ -576,7 +592,7 @@ async function createCloud() {
       }
     };
   }
-
+ 
   return {
     makeStore,
     login: (n, p) => A.signInWithEmailAndPassword(auth, toEmail(n), p),
@@ -585,7 +601,7 @@ async function createCloud() {
     onUser: f => A.onAuthStateChanged(auth, f)
   };
 }
-
+ 
 const AUTH_ERR = {
   'auth/invalid-credential': 'Sai tài khoản hoặc mật khẩu.',
   'auth/wrong-password': 'Sai tài khoản hoặc mật khẩu.',
@@ -599,7 +615,7 @@ const AUTH_ERR = {
   'auth/configuration-not-found': 'Chưa bật Authentication trong Firebase (xem README).',
   'auth/admin-restricted-operation': 'Việc tạo tài khoản mới đang bị tắt.'
 };
-
+ 
 /* ================================================================
    GIAO DIỆN
    ================================================================ */
@@ -611,7 +627,7 @@ let query = '';
 let limit = 100;
 let lastAddedId = null;
 let legacy = [];
-
+ 
 /* ----- tab ----- */
 function showTab(name) {
   ['orders', 'scripts', 'phones'].forEach(n => {
@@ -621,7 +637,7 @@ function showTab(name) {
   try { history.replaceState(null, '', '#' + name); } catch (e) {}
 }
 document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
-
+ 
 /* ----- số liệu chạy ----- */
 function tween(sel, to, f = String) {
   const el = $(sel);
@@ -638,7 +654,7 @@ function tween(sel, to, f = String) {
   };
   requestAnimationFrame(step);
 }
-
+ 
 function renderStats() {
   let rev = 0, p = 0, r = 0;
   for (const o of orders) {
@@ -651,7 +667,7 @@ function renderStats() {
   tween('#st-pending', p);
   tween('#st-running', r);
 }
-
+ 
 function renderFilters() {
   const counts = { all: orders.length };
   for (const o of orders) counts[o.status] = (counts[o.status] || 0) + 1;
@@ -661,7 +677,7 @@ function renderFilters() {
       onclick() { filter = id; limit = 100; render(); } }, label, h('b', { text: String(counts[id] || 0) })));
   });
 }
-
+ 
 function credLine(label, value, secret) {
   if (!value) return h('div', {}, h('span', { class: 'k', text: label }), h('span', { class: 'dash', text: '—' }));
   const span = h('span', { class: 'v', text: secret ? '••••••••' : value });
@@ -675,33 +691,49 @@ function credLine(label, value, secret) {
   line.append(h('button', { type: 'button', text: 'copy', onclick() { copy(value, label === 'TK' ? 'Đã copy tài khoản' : 'Đã copy mật khẩu'); } }));
   return line;
 }
-
+ 
+function openDetail(o) {
+  const close = () => { dlg.remove(); document.removeEventListener('keydown', onKey); };
+  const onKey = ev => { if (ev.key === 'Escape') close(); };
+  const dlg = h('div', { class: 'dlg', onclick(ev) { if (ev.target === dlg) close(); } },
+    h('div', { class: 'dlg-card', role: 'dialog', 'aria-modal': 'true' },
+      h('header', {}, h('h3', { text: 'Đơn #' + String(o.no || 0).padStart(3, '0') + (o.user ? ' · ' + o.user : '') }),
+        h('button', { class: 'del', type: 'button', 'aria-label': 'Đóng', text: '×', onclick: close })),
+      h('div', { class: 'dlg-body', text: o.detail || '(không có nội dung)' }),
+      h('footer', {}, h('span', { class: 'price', text: fmt.format(Number(o.price) || 0) + ' đ' }),
+        h('button', { class: 'ghost', type: 'button', text: 'Copy nội dung', onclick() { copy(o.detail || '', 'Đã copy nội dung'); } }))));
+  document.body.append(dlg);
+  document.addEventListener('keydown', onKey);
+}
+ 
 function renderRows() {
   const q = query.trim().toLowerCase();
   const list = orders.filter(o =>
     (filter === 'all' || o.status === filter) &&
     (!q || (o.user || '').toLowerCase().includes(q) || (o.detail || '').toLowerCase().includes(q)));
-
+ 
   const body = $('#rows');
   const frag = document.createDocumentFragment();
   const shown = list.slice(0, limit);
-
+ 
   shown.forEach(o => {
     const d = o.at ? new Date(o.at) : null;
     const date = d ? String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') : '';
     const status = STATUS_MAP[o.status] ? o.status : 'pending';
-
+ 
     const sel = h('select', { class: 'sel', 'aria-label': 'Trạng thái đơn #' + (o.no || '') });
     STATUS.forEach(s => sel.append(h('option', { value: s[0], text: s[1], ...(s[0] === status ? { selected: '' } : {}) })));
     const st = h('span', { class: 'st' + (status === 'running' ? ' running' : '') }, sel);
     st.style.setProperty('--c', STATUS_MAP[status][2]);
     sel.addEventListener('change', () => store.setStatus(o.id, sel.value));
-
+ 
     frag.append(h('tr', { class: o.id === lastAddedId ? 'new' : '' },
       h('td', { class: 'id c-id' }, '#' + String(o.no || 0).padStart(3, '0'), h('small', { text: date })),
       h('td', { class: 'c-cred' }, h('div', { class: 'cred' }, credLine('TK', o.user, false), credLine('MK', o.pass, true))),
       h('td', { class: 'c-tfa' + (o.tfa ? '' : ' none') }, o.tfa ? h('div', { class: 'cred' }, credLine('', o.tfa, false)) : h('span', { class: 'dash', text: '—' })),
-      h('td', { class: 'c-detail' }, h('div', { class: 'detail', title: o.detail || '', text: o.detail || '' })),
+      h('td', { class: 'c-detail' }, h('div', { class: 'detail', role: 'button', tabindex: '0', title: 'Bấm để xem chi tiết', text: o.detail || '',
+        onclick() { openDetail(o); },
+        onkeydown(ev) { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openDetail(o); } } })),
       h('td', { class: 'price c-price', text: fmt.format(Number(o.price) || 0) + ' đ' }),
       h('td', { class: 'c-st' }, st),
       h('td', { class: 'c-del' }, h('button', { class: 'del', type: 'button', 'aria-label': 'Xóa đơn', title: 'Xóa đơn', text: '×', onclick() {
@@ -709,7 +741,7 @@ function renderRows() {
       } }))
     ));
   });
-
+ 
   body.replaceChildren(frag);
   $('#empty').hidden = list.length > 0;
   $('#empty-sub').textContent = orders.length
@@ -719,16 +751,16 @@ function renderRows() {
   more.hidden = list.length <= limit;
   more.textContent = 'Xem thêm (' + (list.length - limit) + ' đơn)';
 }
-
+ 
 function render() { renderStats(); renderFilters(); renderRows(); }
-
+ 
 $('#more').addEventListener('click', () => { limit += 100; renderRows(); });
 let qTimer;
 $('#q').addEventListener('input', e => {
   clearTimeout(qTimer);
   qTimer = setTimeout(() => { query = e.target.value; limit = 100; renderRows(); }, 120);
 });
-
+ 
 /* ----- form tạo đơn ----- */
 bindPw($('#pw-toggle'), $('#f-pass'));
 $('#form').addEventListener('submit', e => {
@@ -751,7 +783,7 @@ $('#form').addEventListener('submit', e => {
   render(); /* chạy hiệu ứng đơn mới ngay (chế độ local phát dữ liệu trước khi có id) */
   setTimeout(() => { lastAddedId = null; }, 1200);
 });
-
+ 
 /* ----- nhập đơn cũ từ máy này lên tài khoản ----- */
 function readLegacy() {
   const out = [];
@@ -781,7 +813,7 @@ function renderNotice() {
     h('span', { text: 'Tìm thấy ' + legacy.length + ' đơn đang lưu trên máy này (chưa có trong tài khoản).' }),
     h('div', {}, importBtn, h('button', { class: 'ghost', type: 'button', text: 'Bỏ qua', onclick() { save('bfm_import_dismissed', true); renderNotice(); } }))));
 }
-
+ 
 /* ----- kho script ----- */
 const KEY = '__KEY__';
 const GROUPS = [
@@ -843,9 +875,9 @@ const GROUPS = [
 'getgenv().Team = "Marines" -- Marines hoặc Pirates\n' +
 'loadstring(game:HttpGet("https://raw.githubusercontent.com/WhiteX1208/Scripts/refs/heads/main/HopScript.luau"))()' }] }
 ];
-
+ 
 const cleanKey = k => (k || '').replace(/["\\\r\n]/g, '').trim();
-
+ 
 function highlight(code) {
   const frag = document.createDocumentFragment();
   const lines = code.split('\n');
@@ -866,7 +898,7 @@ function highlight(code) {
   });
   return frag;
 }
-
+ 
 const keyViews = []; /* {gid, input, pres} */
 function renderScripts() {
   const root = $('#view-scripts'); root.textContent = '';
@@ -908,11 +940,11 @@ function refreshKeys() {
     v.pres.forEach(p => p.update());
   });
 }
-
+ 
 /* ----- cloudphone ----- */
 let phones = [];
 const PHONE_STALE_MS = 12 * 60 * 1000; /* báo cáo mỗi 5 phút, quá 12 phút = mất kết nối */
-
+ 
 function ago(ms) {
   const s = Math.max(0, Math.round((Date.now() - ms) / 1000));
   if (s < 60) return s + ' giây trước';
@@ -961,7 +993,7 @@ function renderPhones() {
     : 'Tính năng này cần đăng nhập Firebase (điền firebase-config.js, xem README).';
 }
 setInterval(() => { if (!document.hidden && phones.length) renderPhones(); }, 30000);
-
+ 
 /* ----- trạng thái đồng bộ ----- */
 const SYNC_TEXT = { ok: 'Đã đồng bộ', pending: 'Đang đồng bộ…', offline: 'Ngoại tuyến', error: 'Lỗi đồng bộ', local: 'Lưu trên máy này' };
 let lastSync = 'ok';
@@ -973,7 +1005,7 @@ function setSync(s) {
 }
 addEventListener('online', () => setSync(lastSync));
 addEventListener('offline', () => setSync(lastSync));
-
+ 
 /* ----- gắn store vào giao diện ----- */
 function attach(s) {
   store = s;
@@ -994,7 +1026,7 @@ function detach() {
   store = null; orders = []; keys = {}; legacy = []; phones = [];
   render(); refreshKeys(); renderNotice(); renderPhones();
 }
-
+ 
 /* ----- hộp đăng nhập ----- */
 let gateMode = 'login';
 function setGateMode(m) {
@@ -1014,7 +1046,7 @@ function showGate(on) {
 $('#seg-login').addEventListener('click', () => setGateMode('login'));
 $('#seg-register').addEventListener('click', () => setGateMode('register'));
 bindPw($('#g-toggle'), $('#g-pass'));
-
+ 
 /* ----- khởi động ----- */
 function startBackground() {
   const sea = $('#sea');
@@ -1028,7 +1060,7 @@ function startBackground() {
   }
   document.addEventListener('visibilitychange', () => document.documentElement.classList.toggle('paused', document.hidden));
 }
-
+ 
 function startLocal(note) {
   $('#acct').hidden = false; $('#who').hidden = true; $('#logout').hidden = true;
   setSync('local');
@@ -1036,12 +1068,12 @@ function startLocal(note) {
   attach(createLocalStore());
   document.body.classList.remove('booting');
 }
-
+ 
 async function startCloud() {
   let cloud;
   try { cloud = await createCloud(); }
   catch (e) { startLocal('Không tải được Firebase, đang dùng chế độ lưu trên máy này'); return; }
-
+ 
   $('#logout').addEventListener('click', () => cloud.logout());
   $('#gate-form').addEventListener('submit', async e => {
     e.preventDefault();
@@ -1059,7 +1091,7 @@ async function startCloud() {
       err.textContent = AUTH_ERR[ex.code] || ('Lỗi: ' + (ex.code || ex.message));
     } finally { btn.disabled = false; btn.textContent = label; }
   });
-
+ 
   cloud.onUser(user => {
     detach();
     if (user) {
@@ -1075,7 +1107,7 @@ async function startCloud() {
     document.body.classList.remove('booting');
   });
 }
-
+ 
 renderScripts();
 startBackground();
 render();
@@ -1084,3 +1116,4 @@ if (WANT_CLOUD) startCloud(); else startLocal();
 </script>
 </body>
 </html>
+ 
