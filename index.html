@@ -1,702 +1,997 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blox Fruit Manager - Ultra Gaming Edition</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome 6 Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts (Inter & Fira Code) -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-body: #090d16;
-            --bg-card: #131b2e;
-            --bg-card-hover: #1a243f;
-            --border-color: #232f4e;
-            --primary-glow: #6366f1;
-            --accent-cyan: #06b6d4;
-            --accent-green: #10b981;
-            --accent-purple: #a855f7;
-            --accent-pink: #ec4899;
-            --accent-orange: #f97316;
-        }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Blox Fruit Manager</title>
+<meta name="description" content="Quản lý đơn cày thuê Roblox và kho script Blox Fruit">
+<meta name="theme-color" content="#0a1424">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 200'%3E%3Cpath fill='%233b9cff' d='M14 112C14 70 70 38 150 40C230 42 285 78 335 80C350 62 372 52 392 54C384 70 372 80 360 86C374 96 388 112 392 130C372 128 352 118 336 100C290 140 220 168 150 166C70 164 14 150 14 112Z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1424;
+  --panel:#0f1c30;
+  --raise:#152640;
+  --line:#1f3452;
+  --line-soft:#172a45;
+  --text:#e6edf7;
+  --muted:#7f93ad;
+  --faint:#4a5e7a;
+  --accent:#3b9cff;
+  --accent-ink:#04111f;
+  --s-pending:#e2b53f;
+  --s-running:#4fd1c5;
+  --s-done:#6dbf7b;
+  --s-cancel:#e0716a;
+  --glass:rgba(15,28,48,.72);
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:linear-gradient(180deg,#0a1424 0%,#08111f 55%,#07203a 100%) fixed;
+  color:var(--text);font:15px/1.5 var(--sans);min-height:100vh;
+}
+body.locked{overflow:hidden}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.6;cursor:default}
+.wrap{max-width:1280px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+[hidden]{display:none!important}
 
-        body {
-            background-color: var(--bg-body);
-            color: #f1f5f9;
-            font-family: 'Inter', sans-serif;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-                radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%);
-            min-height: 100vh;
-        }
+/* ===== biển ===== */
+.sea{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.whale{position:absolute;color:var(--accent);will-change:transform}
+.whale svg{display:block;width:100%;height:auto;animation:bob 8s ease-in-out infinite}
+.w1{top:14%;left:0;width:min(560px,70vw);opacity:.12;animation:swimR 150s linear infinite;animation-delay:-35s}
+.w2{top:60%;right:0;width:min(340px,52vw);opacity:.09;animation:swimL 105s linear infinite;animation-delay:-45s}
+.w3{top:38%;left:0;width:min(190px,38vw);opacity:.07;animation:swimR 85s linear infinite;animation-delay:-60s}
+.w2 svg{animation-delay:-3s}
+.w3 svg{animation-duration:6s}
+@keyframes swimR{from{transform:translateX(-110%)}to{transform:translateX(100vw)}}
+@keyframes swimL{from{transform:translateX(110%)}to{transform:translateX(-100vw)}}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-1.4deg)}50%{transform:translateY(-16px) rotate(1.4deg)}}
+.waves{position:absolute;left:0;right:0;bottom:0;height:120px;overflow:hidden}
+.wv{position:absolute;left:0;bottom:0;width:200%;height:100%}
+.wv path{fill:rgba(59,156,255,.06)}
+.wv.b path{fill:rgba(79,209,197,.045)}
+.wv.a{animation:slide 22s linear infinite}
+.wv.b{animation:slide 34s linear infinite reverse;bottom:-8px}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.bub{position:absolute;bottom:-30px;border:1px solid rgba(120,190,255,.28);border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,rgba(160,210,255,.2),transparent 60%);animation:rise linear infinite}
+@keyframes rise{0%{transform:translate(0,0);opacity:0}10%{opacity:1}90%{opacity:.7}100%{transform:translate(28px,-115vh);opacity:0}}
+.paused *,.paused *::before{animation-play-state:paused!important}
 
-        /* Glassmorphism Cards */
-        .glass-card {
-            background: rgba(19, 27, 46, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-        }
+/* ===== thanh trên ===== */
+.top{position:sticky;top:0;z-index:5;background:rgba(10,20,36,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:16px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;margin-right:auto;min-width:0}
+.brand b{font-weight:600;font-size:17px;letter-spacing:.01em;white-space:nowrap}
+.brand span{font:12px var(--mono);color:var(--muted);white-space:nowrap}
+.logo{width:40px;height:20px;color:var(--accent);flex:none;animation:bob 6s ease-in-out infinite}
+.tabs{display:flex;gap:4px;align-items:center}
+.tab{background:none;border:0;height:38px;padding:0 18px;border-radius:99px;color:var(--muted);font-weight:500;transition:color .15s,background .15s}
+.tab:hover{color:var(--text);background:rgba(21,38,64,.6)}
+.tab[aria-selected="true"]{background:var(--raise);color:var(--text)}
+.acct{display:flex;align-items:center;gap:10px}
+.who{font:13px var(--mono);color:var(--text);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sync{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);padding:4px 11px;border:1px solid var(--line);border-radius:99px;white-space:nowrap}
+.sync::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c,var(--s-done))}
+.sync[data-s="pending"]{--c:var(--s-pending)}
+.sync[data-s="offline"]{--c:var(--faint)}
+.sync[data-s="error"]{--c:var(--s-cancel)}
+.sync[data-s="local"]{--c:var(--accent)}
 
-        .glass-card:hover {
-            border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 12px 35px -10px rgba(99, 102, 241, 0.15);
-        }
+/* ===== thống kê ===== */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding-top:22px}
+.stat{background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:16px 22px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:fadeup .6s both}
+.stat:nth-child(2){animation-delay:.07s}.stat:nth-child(3){animation-delay:.14s}.stat:nth-child(4){animation-delay:.21s}
+.stat small{display:block;font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stat strong{display:block;margin-top:8px;font:500 32px/1.1 var(--mono);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat.money strong{color:var(--accent)}
+.stat strong i{font-style:normal;font-size:16px;color:var(--muted);margin-left:4px;letter-spacing:0}
+@keyframes fadeup{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-        /* Custom Header */
-        .header-logo {
-            background: linear-gradient(135deg, #6366f1, #a855f7);
-            border-radius: 14px;
-            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
-        }
+/* ===== bố cục ===== */
+main.wrap{padding-top:28px;padding-bottom:80px}
+.grid{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start}
+.grid>div{min-width:0}
+#view-orders:not([hidden]),#view-scripts:not([hidden]){animation:fadeup .4s ease both}
+h2{font:600 13px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
 
-        /* Nav Tabs Gaming Style */
-        .nav-pills-custom {
-            background: rgba(15, 23, 42, 0.9);
-            padding: 6px;
-            border-radius: 14px;
-            border: 1px solid var(--border-color);
-        }
+/* ===== form ===== */
+.form,.tbl,.sgroup{background:var(--glass);border:1px solid var(--line);border-radius:22px;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.form{padding:24px;position:sticky;top:84px;transition:border-color .2s,box-shadow .2s}
+.form:focus-within{border-color:#2a5384;box-shadow:0 0 0 3px rgba(59,156,255,.08)}
+.field{display:block;margin-bottom:14px}
+.field>span{display:block;font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.field>span em{color:var(--accent);font-style:normal}
+.inp{width:100%;background:rgba(10,20,36,.7);border:1px solid var(--line);border-radius:12px;padding:10px 14px;outline:none;transition:border-color .12s}
+.inp::placeholder{color:var(--faint)}
+.inp:focus{border-color:var(--accent)}
+textarea.inp{resize:vertical;min-height:84px}
+.pw{position:relative}
+.pw .inp{padding-right:62px}
+.pw button{position:absolute;right:5px;top:5px;bottom:5px;padding:0 11px;background:none;border:0;color:var(--muted);font-size:12px;border-radius:8px}
+.pw button:hover{color:var(--text);background:var(--raise)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:14px;padding:12px 16px;font-weight:600;width:100%;transition:transform .12s,box-shadow .2s,filter .15s}
+.btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 22px -8px rgba(59,156,255,.7);filter:brightness(1.06)}
+.btn:active:not(:disabled){transform:translateY(1px);box-shadow:none}
+.ghost{background:none;border:1px solid var(--line);border-radius:99px;color:var(--text);padding:6px 16px;font-size:13px;font-weight:500;transition:color .15s,background .15s,border-color .15s;white-space:nowrap}
+.ghost:hover:not(:disabled){border-color:var(--muted);background:var(--raise)}
+.ghost.ok{border-color:var(--s-done);color:var(--s-done)}
+.ghost.solid{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.ghost.solid:hover:not(:disabled){background:var(--accent);filter:brightness(1.1)}
 
-        .nav-pills-custom .nav-link {
-            color: #94a3b8;
-            font-weight: 600;
-            border-radius: 10px;
-            padding: 10px 20px;
-            transition: all 0.3s ease;
-        }
+/* ===== thông báo nhập dữ liệu ===== */
+.notice{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:12px 18px;margin-bottom:14px;border:1px solid #2a5384;background:rgba(59,156,255,.08);border-radius:18px;font-size:14px}
+.notice div{display:flex;gap:8px}
 
-        .nav-pills-custom .nav-link.active {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: #ffffff;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-        }
+/* ===== lọc + tìm ===== */
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px;align-items:center}
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:none;border:1px solid var(--line);border-radius:99px;padding:5px 13px;font-size:13px;color:var(--muted);display:flex;gap:7px;align-items:center;transition:color .15s,border-color .15s}
+.chip:hover{color:var(--text);border-color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--text);color:var(--bg);border-color:var(--text)}
+.chip b{font:500 11px var(--mono);opacity:.7}
+.search{flex:1 1 180px;min-width:160px;border-radius:99px;padding:7px 16px;font-size:14px}
 
-        /* Stat Cards */
-        .stat-icon {
-            width: 54px;
-            height: 54px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-        }
+/* ===== bảng ===== */
+.tbl{overflow:auto}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th{text-align:left;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:13px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#112038}
+.id{font:12px var(--mono);color:var(--muted);white-space:nowrap}
+.id small{display:block;opacity:.7}
+.cred{display:grid;gap:3px;font:13px var(--mono)}
+.cred div{display:flex;align-items:center;gap:8px;min-width:0}
+.cred .k{color:var(--muted);width:18px;font-size:11px;flex:none}
+.cred .v{overflow-wrap:anywhere}
+.cred button{background:none;border:0;color:var(--muted);font:11px var(--mono);padding:1px 7px;border-radius:99px;transition:color .15s,background .15s}
+.cred button:hover{color:var(--accent);background:var(--raise)}
+.dash{color:var(--faint)}
+.detail{max-width:260px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;overflow-wrap:anywhere}
+.price{font:500 14px var(--mono);white-space:nowrap}
+.sel{appearance:none;-webkit-appearance:none;background-color:rgba(10,20,36,.7);border:1px solid var(--line);border-radius:99px;padding:5px 26px 5px 24px;font-size:13px;font-weight:500;cursor:pointer;outline:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);
+  background-position:calc(100% - 13px) 50%,calc(100% - 8px) 50%;background-size:5px 5px;background-repeat:no-repeat}
+.sel:focus{border-color:var(--accent)}
+.sel option{background:var(--panel);color:var(--text)}
+.st{position:relative;display:inline-block}
+.st::before{content:"";position:absolute;left:10px;top:50%;width:7px;height:7px;margin-top:-3.5px;border-radius:50%;background:var(--c);pointer-events:none}
+.st.running::before{animation:pulse 1.8s ease-out infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(79,209,197,.6)}100%{box-shadow:0 0 0 8px rgba(79,209,197,0)}}
+.del{background:none;border:0;color:var(--muted);font-size:18px;line-height:1;width:30px;height:30px;border-radius:50%;display:inline-grid;place-items:center;transition:color .15s,background .15s}
+.del:hover{color:var(--s-cancel);background:var(--raise)}
+tbody tr.new{animation:rowin .9s ease both}
+@keyframes rowin{0%{opacity:0;transform:translateY(-8px);background:rgba(59,156,255,.22)}40%{opacity:1;transform:none}100%{background:transparent}}
+.empty{padding:56px 20px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--text);font-weight:500;margin-bottom:4px}
+.more{display:block;margin:0 auto;padding:14px 0 16px}
 
-        /* Form Control Styling */
-        .form-control-custom {
-            background-color: #0b1120;
-            border: 1px solid var(--border-color);
-            color: #f8fafc;
-            border-radius: 10px;
-            padding: 10px 14px;
-            font-size: 0.95rem;
-            transition: all 0.3s ease;
-        }
+/* ===== kho script ===== */
+.scripts{display:grid;gap:20px;max-width:900px}
+.sgroup{overflow:hidden}
+.sgroup>header{padding:16px 22px;border-bottom:1px solid var(--line)}
+.sgroup h3{font-size:16px;font-weight:600}
+.sgroup h3 small{display:block;font:400 12px var(--mono);color:var(--muted);margin-top:2px}
+.keybar{display:flex;align-items:center;gap:10px;padding:12px 22px;border-bottom:1px solid var(--line-soft);background:rgba(10,20,36,.55)}
+.keybar label{font-size:13px;color:var(--muted);white-space:nowrap}
+.keybar .inp{max-width:360px;font:13px var(--mono)}
+.block{padding:16px 22px}
+.block+.block{border-top:1px solid var(--line-soft)}
+.bhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.bhead span{font-size:13px;font-weight:500}
+pre{background:rgba(7,14,26,.7);border:1px solid var(--line-soft);border-radius:14px;padding:14px;overflow:auto;font:12.5px/1.65 var(--mono);color:#c3d2e8;tab-size:2;max-height:340px}
+pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
 
-        .form-control-custom:focus {
-            background-color: #0b1120;
-            border-color: var(--primary-glow);
-            color: #ffffff;
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-        }
+/* ===== đăng nhập ===== */
+.gate{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:20px;background:rgba(6,12,22,.74);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);overflow:auto}
+.card{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--line);border-radius:26px;padding:28px;box-shadow:0 30px 80px -30px rgba(0,0,0,.8);animation:fadeup .4s both}
+.card .logo{width:56px;height:28px;margin-bottom:10px}
+.card h1{font-size:21px;font-weight:600}
+.card p.sub{color:var(--muted);font-size:14px;margin-top:2px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--bg);border:1px solid var(--line-soft);border-radius:99px;padding:4px;margin:20px 0 18px}
+.seg button{border:0;background:none;border-radius:99px;padding:8px;color:var(--muted);font-weight:500;transition:background .15s,color .15s}
+.seg button[aria-selected="true"]{background:var(--raise);color:var(--text)}
+.err{min-height:20px;color:var(--s-cancel);font-size:13px;margin:-2px 0 10px}
 
-        .form-label-custom {
-            font-size: 0.82rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: #94a3b8;
-            margin-bottom: 6px;
-        }
+.toast{position:fixed;left:50%;bottom:28px;z-index:30;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--text);color:var(--bg);padding:10px 22px;border-radius:99px;font-size:14px;font-weight:500;transition:.18s;max-width:calc(100vw - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
 
-        /* Custom Buttons */
-        .btn-neon-primary {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            color: white;
-            font-weight: 600;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .btn-neon-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
-            color: white;
-        }
-
-        /* Table Styling */
-        .custom-table {
-            margin-bottom: 0;
-            color: #cbd5e1;
-        }
-
-        .custom-table thead th {
-            background: #0b1120;
-            color: #94a3b8;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            border-bottom: 2px solid var(--border-color);
-            padding: 14px 16px;
-        }
-
-        .custom-table tbody tr {
-            border-bottom: 1px solid rgba(35, 47, 78, 0.5);
-            transition: all 0.2s ease;
-        }
-
-        .custom-table tbody tr:hover {
-            background: rgba(30, 41, 59, 0.6);
-        }
-
-        .custom-table td {
-            padding: 14px 16px;
-            vertical-align: middle;
-        }
-
-        /* Badges */
-        .badge-status {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-        }
-        .badge-pending { background: rgba(249, 115, 22, 0.15); color: #fb923c; border: 1px solid rgba(249, 115, 22, 0.3); }
-        .badge-working { background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
-        .badge-completed { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
-        .badge-cancelled { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
-
-        /* Code Blocks */
-        pre code {
-            font-family: 'Fira Code', monospace !important;
-            font-size: 0.85rem;
-            color: #38bdf8 !important;
-            background: #090d16 !important;
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 14px;
-            display: block;
-            max-height: 250px;
-            overflow-y: auto;
-        }
-
-        .credential-box {
-            background: #0b1120;
-            border: 1px solid #1e293b;
-            border-radius: 6px;
-            padding: 4px 8px;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            color: #a5b4fc;
-        }
-
-        .btn-action-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-    </style>
+/* ===== màn hình nhỏ ===== */
+@media (max-width:900px){
+  .grid{grid-template-columns:1fr}
+  .form{position:static}
+  .stats{grid-template-columns:1fr 1fr}
+  .stat strong{font-size:26px}
+}
+@media (max-width:700px){
+  .wrap{padding:0 16px}
+  main.wrap{padding-top:20px}
+  .bar{flex-wrap:wrap;height:auto;padding-top:12px;padding-bottom:10px;gap:8px 12px}
+  .brand span{display:none}
+  .tabs{order:3;width:100%}
+  .tab{flex:1}
+  .stats .stat{padding:14px 16px}
+  /* tắt blur trên điện thoại cho nhẹ máy */
+  .form,.tbl,.sgroup,.stat,.top{-webkit-backdrop-filter:none;backdrop-filter:none}
+  .form,.tbl,.sgroup,.stat{background:rgba(15,28,48,.92)}
+  .top{position:relative;background:rgba(10,20,36,.95)}
+  .keybar{flex-wrap:wrap}
+  .keybar .inp{max-width:none;flex:1 1 100%}
+  /* bảng thành thẻ */
+  table{min-width:0}
+  thead{display:none}
+  tbody tr{display:grid;grid-template-columns:1fr auto;gap:8px 12px;padding:14px 16px;border-bottom:1px solid var(--line-soft)}
+  tbody tr:last-child{border-bottom:0}
+  td{padding:0;border:0}
+  .c-id{grid-column:1;grid-row:1}
+  .c-del{grid-column:2;grid-row:1;justify-self:end}
+  .c-cred{grid-column:1/-1;grid-row:2}
+  .c-tfa{grid-column:1/-1;grid-row:3}
+  .c-tfa.none{display:none}
+  .c-tfa:not(.none){display:flex;align-items:center;gap:8px}
+  .c-tfa:not(.none)::before{content:"2FA";font:11px var(--mono);color:var(--muted)}
+  .c-tfa .cred .k{display:none}
+  .c-detail{grid-column:1/-1;grid-row:4}
+  .detail{max-width:none}
+  .c-price{grid-column:1;grid-row:5;align-self:center}
+  .c-st{grid-column:2;grid-row:5}
+  .id small{display:inline;margin-left:8px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+<script src="firebase-config.js"></script>
 </head>
-<body class="py-4">
+<body class="booting">
 
-    <div class="container-xl">
-        <!-- Top Navigation Bar -->
-        <div class="glass-card p-3 mb-4 d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-            <div class="d-flex align-items-center gap-3">
-                <div class="header-logo p-3 text-white">
-                    <i class="fa-solid fa-gamepad fa-xl"></i>
-                </div>
-                <div>
-                    <div class="d-flex align-items-center gap-2">
-                        <h4 class="fw-800 mb-0 text-white">BLOX FRUIT MANAGER</h4>
-                        <span class="badge bg-gradient bg-danger text-uppercase px-2 py-1 fs-7">PRO MAX</span>
-                    </div>
-                    <small class="text-muted fs-7">Hệ thống quản lý dịch vụ cày thuê Roblox & Kho Script Cyberpunk</small>
-                </div>
-            </div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="whale" viewBox="0 0 400 200">
+      <path fill="currentColor" d="M14 112C14 70 70 38 150 40C230 42 285 78 335 80C350 62 372 52 392 54C384 70 372 80 360 86C374 96 388 112 392 130C372 128 352 118 336 100C290 140 220 168 150 166C70 164 14 150 14 112Z"/>
+      <path fill="currentColor" opacity=".7" d="M120 140C140 170 175 190 205 193C194 170 178 150 162 140Z"/>
+      <path d="M22 118C52 128 92 130 132 124" fill="none" stroke="#0a1424" stroke-width="3" stroke-linecap="round" opacity=".45"/>
+      <circle cx="64" cy="100" r="4" fill="#0a1424" opacity=".55"/>
+    </symbol>
+  </defs>
+</svg>
 
-            <!-- Tabs Switcher -->
-            <ul class="nav nav-pills-custom" id="mainTab" role="tablist">
-                <li class="nav-item">
-                    <button class="nav-link active" id="orders-tab" data-bs-toggle="pill" data-bs-target="#orders-pane"><i class="fa-solid fa-list-check me-2"></i>Quản Lý Đơn Hàng</button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" id="scripts-tab" data-bs-toggle="pill" data-bs-target="#scripts-pane"><i class="fa-solid fa-terminal me-2"></i>Kho Script VIP</button>
-                </li>
-            </ul>
-        </div>
+<div class="sea" id="sea" aria-hidden="true">
+  <div class="whale w1"><svg viewBox="0 0 400 200"><use href="#whale" transform="translate(400 0) scale(-1 1)"/></svg></div>
+  <div class="whale w2"><svg viewBox="0 0 400 200"><use href="#whale"/></svg></div>
+  <div class="whale w3"><svg viewBox="0 0 400 200"><use href="#whale" transform="translate(400 0) scale(-1 1)"/></svg></div>
+  <div class="waves">
+    <svg class="wv a" viewBox="0 0 2880 120" preserveAspectRatio="none"><path d="M0 60C180 20 540 100 720 60C900 20 1260 100 1440 60C1620 20 1980 100 2160 60C2340 20 2700 100 2880 60V120H0Z"/></svg>
+    <svg class="wv b" viewBox="0 0 2880 120" preserveAspectRatio="none"><path d="M0 70C180 100 540 30 720 70C900 100 1260 30 1440 70C1620 100 1980 30 2160 70C2340 100 2700 30 2880 70V120H0Z"/></svg>
+  </div>
+</div>
 
-        <!-- Main Tab Contents -->
-        <div class="tab-content" id="mainTabContent">
-            
-            <!-- TAB 1: QUẢN LÝ ĐƠN HÀNG -->
-            <div class="tab-pane fade show active" id="orders-pane">
-                
-                <!-- Stat Cards Grid -->
-                <div class="row g-3 mb-4">
-                    <div class="col-6 col-md-3">
-                        <div class="glass-card p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="form-label-custom">TỔNG ĐƠN HÀNG</div>
-                                    <h3 class="fw-bold mb-0 text-white" id="stat-total">0</h3>
-                                </div>
-                                <div class="stat-icon bg-primary bg-opacity-10 text-primary">
-                                    <i class="fa-solid fa-cubes"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="glass-card p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="form-label-custom">DOANH THU THỰC</div>
-                                    <h3 class="fw-bold mb-0 text-success" id="stat-money">0 đ</h3>
-                                </div>
-                                <div class="stat-icon bg-success bg-opacity-10 text-success">
-                                    <i class="fa-solid fa-sack-dollar"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="glass-card p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="form-label-custom">ĐƠN CHỜ DUYỆT</div>
-                                    <h3 class="fw-bold mb-0 text-warning" id="stat-pending">0</h3>
-                                </div>
-                                <div class="stat-icon bg-warning bg-opacity-10 text-warning">
-                                    <i class="fa-solid fa-hourglass-half"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <div class="glass-card p-3">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <div class="form-label-custom">ĐANG CÀY THUÊ</div>
-                                    <h3 class="fw-bold mb-0 text-info" id="stat-working">0</h3>
-                                </div>
-                                <div class="stat-icon bg-info bg-opacity-10 text-info">
-                                    <i class="fa-solid fa-bolt"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Form Add Order -->
-                <div class="glass-card p-4 mb-4">
-                    <h6 class="fw-bold text-white mb-3 d-flex align-items-center gap-2">
-                        <i class="fa-solid fa-circle-plus text-primary"></i> Tạo Đơn Cày Thuê Mới
-                    </h6>
-                    <form id="orderForm" class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label-custom">Tài Khoản Roblox (TK) *</label>
-                            <input type="text" class="form-control form-control-custom" id="username" required placeholder="Tên đăng nhập / Email">
-                        </div>
-                        <div class="col-md-3">
-                            <label class="form-label-custom">Mật Khẩu (MK) *</label>
-                            <input type="text" class="form-control form-control-custom" id="password" required placeholder="Mật khẩu Roblox">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label-custom">Mã 2FA / Backup</label>
-                            <input type="text" class="form-control form-control-custom" id="two_fa" placeholder="VD: 123456">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label-custom">Giá Tiền (VNĐ) *</label>
-                            <input type="number" class="form-control form-control-custom" id="price" required placeholder="VD: 100000">
-                        </div>
-                        <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-neon-primary w-100"><i class="fa-solid fa-plus me-1"></i> Lưu Đơn</button>
-                        </div>
-                        <div class="col-12">
-                            <label class="form-label-custom">Chi Tiết Yêu Cầu Cày Thuê *</label>
-                            <input type="text" class="form-control form-control-custom" id="content" required placeholder="VD: Up Max level 2550 + Săn Cursed Dual Katana + Lấy Soul Guitar">
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Orders Table -->
-                <div class="glass-card overflow-hidden">
-                    <div class="p-3 d-flex flex-column flex-md-row justify-content-between align-items-center border-bottom border-secondary border-opacity-25 gap-2">
-                        <h6 class="fw-bold text-white mb-0"><i class="fa-solid fa-table text-primary me-2"></i> Danh Sách Đơn Cày Thuê</h6>
-                        <!-- Filter Buttons -->
-                        <div class="btn-group btn-group-sm" id="filterGroup">
-                            <button class="btn btn-outline-secondary active" onclick="filterOrders('Tất cả')">Tất cả</button>
-                            <button class="btn btn-outline-warning" onclick="filterOrders('Chờ duyệt')">Chờ duyệt</button>
-                            <button class="btn btn-outline-info" onclick="filterOrders('Đang cày')">Đang cày</button>
-                            <button class="btn btn-outline-success" onclick="filterOrders('Hoàn thành')">Hoàn thành</button>
-                            <button class="btn btn-outline-danger" onclick="filterOrders('Đã hủy')">Đã hủy</button>
-                        </div>
-                    </div>
-                    
-                    <div class="table-responsive">
-                        <table class="table custom-table text-center align-middle">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tài khoản / Mật khẩu</th>
-                                    <th>Mã 2FA</th>
-                                    <th class="text-start">Chi tiết đơn hàng</th>
-                                    <th>Giá tiền</th>
-                                    <th>Trạng thái</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody id="orderTableBody">
-                                <!-- Data rendered via JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- TAB 2: KHO SCRIPT BLOX FRUIT -->
-            <div class="tab-pane fade" id="scripts-pane">
-                <div class="row g-4">
-                    
-                    <!-- Realkid Main -->
-                    <div class="col-md-6">
-                        <div class="glass-card p-4 h-100">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="fw-bold text-info mb-0"><i class="fa-solid fa-code me-2"></i> Realkid Main</h6>
-                                <button class="btn btn-sm btn-outline-info rounded-pill" onclick="copyScript('script-realkid-main')"><i class="fa-regular fa-copy me-1"></i> Copy Script</button>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label-custom">Nhập Key Realkid Main:</label>
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control form-control-custom" id="key-realkid-main" placeholder="Dán key vào đây...">
-                                    <button class="btn btn-success fw-bold px-3" onclick="upKeyRealkidMain()">Up Key</button>
-                                </div>
-                            </div>
-                            <pre><code id="script-realkid-main">getgenv().Key = ""
-loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/main.lua"))()</code></pre>
-                        </div>
-                    </div>
-
-                    <!-- Realkid Kaitun -->
-                    <div class="col-md-6">
-                        <div class="glass-card p-4 h-100">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="fw-bold text-warning mb-0"><i class="fa-solid fa-fire me-2"></i> Realkid Kaitun (Dual Config)</h6>
-                                <div class="d-flex gap-2">
-                                    <button class="btn btn-sm btn-outline-warning rounded-pill" onclick="copyScript('script-realkid-kaitun-1')">Copy GodMax</button>
-                                    <button class="btn btn-sm btn-outline-warning rounded-pill" onclick="copyScript('script-realkid-kaitun-2')">Copy Godhuman</button>
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label-custom">Nhập Key Chung (Áp dụng cho cả 2 Config):</label>
-                                <div class="input-group input-group-sm">
-                                    <input type="text" class="form-control form-control-custom" id="key-realkid-kaitun-chung" placeholder="Dán key kaitun vào đây...">
-                                    <button class="btn btn-warning text-dark fw-bold px-3" onclick="upKeyRealkidKaitunAll()">Up Key Chung</button>
-                                </div>
-                            </div>
-                            
-                            <label class="form-label-custom text-info">Config 1: GodMax</label>
-                            <pre class="mb-3"><code id="script-realkid-kaitun-1">getgenv().Configs = {
-    ["Key"] = ""; -- Để trống để dùng key đã lưu hoặc nhập qua UI
-    ["Quest"] = {
-      
-    };
-    Sword = {
-
-    };
-    Gun = {
-  
-    };
-    ["Auto Active Race V4"] = true;
-    ["FPS Limit"] = 60;
-    ["Boost FPS"] = true;
-    ["Hop Near"] = {Enabled = false; Distance = 500;};-- Hop khi có người chơi khác ở gần i'm gay
-    ["Webhook"] = {
-        ["URL"] = ""; -- Discord webhook URL; để trống để tắt
-        ["Interval"] = 300; -- Gửi báo cáo mỗi 300 giây
-    };
-};
-loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/kaitun.lua"))()</code></pre>
-
-                            <label class="form-label-custom text-info">Config 2: Godhuman Cdk Skull guitar and Pull lever</label>
-                            <pre><code id="script-realkid-kaitun-2">getgenv().Configs = {
-    ["Key"] = ""; -- Để trống để dùng key đã lưu hoặc nhập qua UI
-    ["Quest"] = {
-        ["Evo Race V1"] = true;
-        ["Evo Race V2"] = true;
-     
-        ["Pull Lerver"] = true;
-    };
-    Sword = {
-      
-        "Yama";
-        "Tushita";
-        "Cursed Dual Katana";
-    };
-    Gun = {
-        "Skull Guitar";
-
-    };
-    ["Auto Active Race V4"] = true;
-    ["FPS Limit"] = 60;
-    ["Boost FPS"] = true;
-    ["Hop Near"] = {Enabled = false; Distance = 500;};-- Hop khi có người chơi khác ở gần i'm gay
-    ["Webhook"] = {
-        ["URL"] = ""; -- Discord webhook URL; để trống để tắt
-        ["Interval"] = 300; -- Gửi báo cáo mỗi 300 giây
-    };
-};
-loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/kaitun.lua"))()</code></pre>
-                        </div>
-                    </div>
-
-                    <!-- Night Hub Main -->
-                    <div class="col-md-6">
-                        <div class="glass-card p-4 h-100">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="fw-bold text-success mb-0"><i class="fa-solid fa-moon me-2"></i> Night Hub Main (Key Free)</h6>
-                                <button class="btn btn-sm btn-outline-success rounded-pill" onclick="copyScript('script-nighthub-main')"><i class="fa-regular fa-copy me-1"></i> Copy Script</button>
-                            </div>
-                            <pre><code id="script-nighthub-main">script_key = "" -- default is FREEMIUM
-loadstring(game:HttpGet("https://raw.githubusercontent.com/WhiteX1208/Scripts/refs/heads/main/BF-Main.luau"))()</code></pre>
-                        </div>
-                    </div>
-
-                    <!-- Night Hub Hop Boss -->
-                    <div class="col-md-6">
-                        <div class="glass-card p-4 h-100">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h6 class="fw-bold text-success mb-0"><i class="fa-solid fa-ghost me-2"></i> Night Hub Hop Boss</h6>
-                                <button class="btn btn-sm btn-outline-success rounded-pill" onclick="copyScript('script-nighthub-hop')"><i class="fa-regular fa-copy me-1"></i> Copy Script</button>
-                            </div>
-                            <pre><code id="script-nighthub-hop">getgenv().Team = "Marines" -- Marnies
-loadstring(game:HttpGet("https://raw.githubusercontent.com/WhiteX1208/Scripts/refs/heads/main/HopScript.luau"))()</code></pre>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
+<header class="top">
+  <div class="wrap bar">
+    <div class="brand"><svg class="logo" viewBox="0 0 400 200" aria-hidden="true"><use href="#whale" transform="translate(400 0) scale(-1 1)"/></svg><b>Blox Fruit Manager</b><span>cày thuê &amp; kho script</span></div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-orders" aria-selected="true" data-tab="orders">Đơn hàng</button>
+      <button class="tab" role="tab" id="tab-scripts" aria-selected="false" data-tab="scripts">Kho script</button>
+    </nav>
+    <div class="acct" id="acct" hidden>
+      <span class="sync" id="sync" data-s="ok">Đã đồng bộ</span>
+      <span class="who" id="who"></span>
+      <button class="ghost" id="logout" type="button" hidden>Đăng xuất</button>
     </div>
+  </div>
+</header>
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<div class="wrap">
+  <section class="stats" aria-label="Thống kê">
+    <div class="stat"><small>Tổng đơn</small><strong id="st-total">0</strong></div>
+    <div class="stat money"><small>Doanh thu thực</small><strong><span id="st-rev">0</span><i>đ</i></strong></div>
+    <div class="stat"><small>Chờ duyệt</small><strong id="st-pending">0</strong></div>
+    <div class="stat"><small>Đang cày</small><strong id="st-running">0</strong></div>
+  </section>
+</div>
 
-    <!-- App Logic JavaScript -->
-    <script>
-        let orders = JSON.parse(localStorage.getItem('blox_orders_v2')) || [
-            { id: 101, username: 'pro_player99', password: 'password123!', two_fa: '882910', content: 'Up level 1500 -> 2550 + Mua Godhuman', price: 120000, status: 'Hoàn thành' },
-            { id: 102, username: 'dragon_slayer_v4', password: 'RobloxSuperVip99', two_fa: 'AFEX-9921', content: 'Săn Cursed Dual Katana + Vá Tộc Rồng Thần', price: 250000, status: 'Đang cày' },
-            { id: 103, username: 'bloxfruit_master', password: 'KyPasSword888', two_fa: '', content: 'Cày 10.000.000 Beli + Mở Haki VQ KN', price: 80000, status: 'Chờ duyệt' }
-        ];
+<main class="wrap">
+  <section id="view-orders" class="grid">
+    <form class="form" id="form" autocomplete="off">
+      <h2>Tạo đơn mới</h2>
+      <label class="field"><span>Tài khoản Roblox <em>*</em></span>
+        <input class="inp" id="f-user" required placeholder="username"></label>
+      <label class="field"><span>Mật khẩu <em>*</em></span>
+        <div class="pw"><input class="inp" id="f-pass" type="password" required placeholder="••••••••">
+        <button type="button" id="pw-toggle">Hiện</button></div></label>
+      <div class="row2">
+        <label class="field"><span>Mã 2FA / Backup</span>
+          <input class="inp" id="f-2fa" placeholder="không bắt buộc"></label>
+        <label class="field"><span>Giá (VNĐ) <em>*</em></span>
+          <input class="inp" id="f-price" type="number" min="0" step="1000" required placeholder="50000"></label>
+      </div>
+      <label class="field"><span>Chi tiết yêu cầu <em>*</em></span>
+        <textarea class="inp" id="f-detail" required placeholder="VD: Lên level max, lấy God Human…"></textarea></label>
+      <button class="btn" type="submit">Lưu đơn</button>
+    </form>
 
-        let currentFilter = 'Tất cả';
+    <div>
+      <h2>Danh sách đơn</h2>
+      <div id="notice"></div>
+      <div class="toolbar">
+        <div class="filters" id="filters"></div>
+        <input class="inp search" id="q" type="search" placeholder="Tìm tài khoản hoặc nội dung…" aria-label="Tìm đơn">
+      </div>
+      <div class="tbl">
+        <table>
+          <thead><tr><th>ID</th><th>Tài khoản</th><th>2FA</th><th>Chi tiết</th><th>Giá</th><th>Trạng thái</th><th></th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <div class="empty" id="empty" hidden><b>Chưa có đơn nào</b><span id="empty-sub"></span></div>
+        <button class="ghost more" id="more" type="button" hidden>Xem thêm</button>
+      </div>
+    </div>
+  </section>
 
-        function saveAndRender() {
-            localStorage.setItem('blox_orders_v2', JSON.stringify(orders));
-            renderOrders();
-            updateStats();
+  <section id="view-scripts" class="scripts" hidden></section>
+</main>
+
+<div class="gate" id="gate" hidden>
+  <form class="card" id="gate-form" novalidate>
+    <svg class="logo" viewBox="0 0 400 200" aria-hidden="true"><use href="#whale" transform="translate(400 0) scale(-1 1)"/></svg>
+    <h1>Blox Fruit Manager</h1>
+    <p class="sub">Đăng nhập để xem đơn hàng của bạn trên mọi thiết bị.</p>
+    <div class="seg" role="tablist">
+      <button type="button" role="tab" id="seg-login" aria-selected="true">Đăng nhập</button>
+      <button type="button" role="tab" id="seg-register" aria-selected="false">Tạo tài khoản</button>
+    </div>
+    <label class="field"><span>Tên tài khoản</span>
+      <input class="inp" id="g-user" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="vd: minh744"></label>
+    <label class="field"><span>Mật khẩu</span>
+      <div class="pw"><input class="inp" id="g-pass" type="password" autocomplete="current-password" placeholder="ít nhất 6 ký tự">
+      <button type="button" id="g-toggle">Hiện</button></div></label>
+    <label class="field" id="g-confirm-wrap" hidden><span>Nhập lại mật khẩu</span>
+      <input class="inp" id="g-confirm" type="password" autocomplete="new-password"></label>
+    <div class="err" id="g-err" role="alert"></div>
+    <button class="btn" id="g-submit" type="submit">Đăng nhập</button>
+  </form>
+</div>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script type="module">
+/* ================================================================
+   Blox Fruit Manager
+   - Có firebase-config.js hợp lệ  -> đăng nhập + dữ liệu lưu trên cloud
+   - Không có                      -> lưu trên trình duyệt (localStorage)
+   ================================================================ */
+
+const CFG = window.FIREBASE_CONFIG || {};
+const WANT_CLOUD = !!(CFG.apiKey && CFG.projectId);
+const FB_VER = '10.12.2';
+const FAKE_DOMAIN = '@bot-manager.local';
+
+/* ---------- tiện ích ---------- */
+const $ = (s, r) => (r || document).querySelector(s);
+function h(tag, props = {}, ...kids) {
+  const el = document.createElement(tag);
+  for (const k in props) {
+    const v = props[k];
+    if (k === 'class') el.className = v;
+    else if (k === 'text') el.textContent = v;
+    else if (k.startsWith('on')) el.addEventListener(k.slice(2), v);
+    else el.setAttribute(k, v);
+  }
+  for (const c of kids) if (c != null && c !== false) el.append(c);
+  return el;
+}
+function load(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } }
+function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+const fmt = new Intl.NumberFormat('vi-VN');
+const reduce = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+let toastTimer;
+function toast(msg) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('on'), 2000);
+}
+function copy(text, okMsg) {
+  const done = () => toast(okMsg || 'Đã copy');
+  const fallback = () => {
+    const ta = h('textarea'); ta.value = text; ta.style.cssText = 'position:fixed;opacity:0';
+    document.body.append(ta); ta.select();
+    try { document.execCommand('copy'); done(); } catch (e) { toast('Không copy được'); }
+    ta.remove();
+  };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fallback);
+  else fallback();
+}
+function bindPw(btn, input) {
+  btn.addEventListener('click', () => {
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password'; btn.textContent = show ? 'Ẩn' : 'Hiện';
+  });
+}
+
+/* ---------- trạng thái đơn ---------- */
+const STATUS = [
+  ['pending', 'Chờ duyệt', 'var(--s-pending)'],
+  ['running', 'Đang cày', 'var(--s-running)'],
+  ['done', 'Hoàn thành', 'var(--s-done)'],
+  ['cancel', 'Đã hủy', 'var(--s-cancel)']
+];
+const STATUS_MAP = Object.fromEntries(STATUS.map(s => [s[0], s]));
+const VN_STATUS = Object.fromEntries(STATUS.map(s => [s[1], s[0]]));
+
+function sortOrders(list) {
+  return list.slice().sort((a, b) => ((b.at || 0) - (a.at || 0)) || ((b.no || 0) - (a.no || 0)));
+}
+function normLegacy(o) {
+  return {
+    user: String(o.user || o.username || ''),
+    pass: String(o.pass || o.password || ''),
+    tfa: String(o.tfa || o.two_fa || ''),
+    detail: String(o.detail || o.content || ''),
+    price: Number(o.price) || 0,
+    status: STATUS_MAP[o.status] ? o.status : (VN_STATUS[o.status] || 'pending'),
+    at: Number(o.at) || 0,
+    no: Number(o.no || o.id) || 0
+  };
+}
+
+/* ================================================================
+   LƯU TRÊN MÁY (localStorage)
+   ================================================================ */
+function createLocalStore() {
+  let list = load('bfm_orders_v2', []).map(o => ({ ...o, id: o.id, no: o.no || o.id }));
+  let keys = load('bfm_keys_v2', {});
+  const cb = {};
+  const emit = () => cb.orders && cb.orders(sortOrders(list));
+  const persist = () => { save('bfm_orders_v2', list); emit(); };
+  return {
+    mode: 'local',
+    onOrders(f) { cb.orders = f; }, onKeys(f) { cb.keys = f; }, onSync() {},
+    start() { emit(); cb.keys && cb.keys(keys); },
+    stop() {},
+    add(data) {
+      const no = list.reduce((m, o) => Math.max(m, o.no || 0), 100) + 1;
+      list.push({ ...data, id: no, no, at: Date.now() }); persist(); return no;
+    },
+    setStatus(id, s) { const o = list.find(x => x.id === id); if (o) { o.status = s; persist(); } },
+    remove(id) { list = list.filter(x => x.id !== id); persist(); },
+    setKey(gid, v) { keys[gid] = v; save('bfm_keys_v2', keys); },
+    async importMany() {}
+  };
+}
+
+/* ================================================================
+   CLOUD (Firebase Auth + Firestore)
+   ================================================================ */
+async function createCloud() {
+  const base = `https://www.gstatic.com/firebasejs/${FB_VER}/`;
+  const [appM, A, F] = await Promise.all([
+    import(base + 'firebase-app.js'),
+    import(base + 'firebase-auth.js'),
+    import(base + 'firebase-firestore.js')
+  ]);
+  const app = appM.initializeApp(CFG);
+  const auth = A.getAuth(app);
+  let db;
+  try {
+    db = F.initializeFirestore(app, { localCache: F.persistentLocalCache({ tabManager: F.persistentMultipleTabManager() }) });
+  } catch (e) { db = F.getFirestore(app); }
+
+  const toEmail = n => { n = n.trim().toLowerCase(); return n.includes('@') ? n : n + FAKE_DOMAIN; };
+  const niceName = u => (u.email || '').replace(FAKE_DOMAIN, '');
+
+  function makeStore(user) {
+    const uid = user.uid;
+    const col = F.collection(db, 'users', uid, 'orders');
+    const meta = F.doc(db, 'users', uid);
+    const cb = {}; const unsubs = [];
+    let list = []; let first = true; let pendingKey = {}; let keyTimer;
+    const sync = s => cb.sync && cb.sync(s);
+    return {
+      mode: 'cloud', user, name: niceName(user),
+      onOrders(f) { cb.orders = f; }, onKeys(f) { cb.keys = f; }, onSync(f) { cb.sync = f; },
+      start() {
+        unsubs.push(F.onSnapshot(F.query(col, F.orderBy('at', 'desc')), { includeMetadataChanges: true }, snap => {
+          const m = snap.metadata;
+          sync(m.hasPendingWrites ? 'pending' : (m.fromCache ? (navigator.onLine ? 'pending' : 'offline') : 'ok'));
+          if (first || snap.docChanges().length) {
+            first = false;
+            list = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+            cb.orders && cb.orders(list);
+          }
+        }, err => {
+          sync('error');
+          toast(err.code === 'permission-denied' ? 'Chưa cấu hình Rules cho Firestore (xem README)' : 'Lỗi đồng bộ: ' + (err.code || err.message));
+        }));
+        unsubs.push(F.onSnapshot(meta, snap => { cb.keys && cb.keys((snap.data() || {}).keys || {}); }, () => {}));
+      },
+      stop() { unsubs.splice(0).forEach(u => u()); clearTimeout(keyTimer); },
+      add(data) {
+        const no = list.reduce((m, o) => Math.max(m, o.no || 0), 100) + 1;
+        const ref = F.doc(col);
+        F.setDoc(ref, { ...data, no, at: Date.now() }).catch(e => toast('Không lưu được: ' + (e.code || e.message)));
+        return ref.id;
+      },
+      setStatus(id, s) { F.updateDoc(F.doc(col, id), { status: s }).catch(e => toast('Không lưu được: ' + (e.code || e.message))); },
+      remove(id) { F.deleteDoc(F.doc(col, id)).catch(e => toast('Không xóa được: ' + (e.code || e.message))); },
+      setKey(gid, v) {
+        pendingKey[gid] = v; clearTimeout(keyTimer);
+        keyTimer = setTimeout(() => {
+          const k = pendingKey; pendingKey = {};
+          F.setDoc(meta, { keys: k }, { merge: true }).catch(() => {});
+        }, 600);
+      },
+      async importMany(items) {
+        let no = list.reduce((m, o) => Math.max(m, o.no || 0), 100);
+        for (let i = 0; i < items.length; i += 400) {
+          const b = F.writeBatch(db);
+          items.slice(i, i + 400).forEach(it => b.set(F.doc(col), { ...it, no: ++no }));
+          await b.commit();
         }
-
-        function updateStats() {
-            document.getElementById('stat-total').innerText = orders.length;
-            
-            // Tính tổng tiền các đơn ở trạng thái Hoàn thành
-            let totalMoney = orders
-                .filter(o => o.status === 'Hoàn thành')
-                .reduce((sum, o) => sum + Number(o.price), 0);
-            
-            document.getElementById('stat-money').innerText = totalMoney.toLocaleString('vi-VN') + ' đ';
-            document.getElementById('stat-pending').innerText = orders.filter(o => o.status === 'Chờ duyệt').length;
-            document.getElementById('stat-working').innerText = orders.filter(o => o.status === 'Đang cày').length;
-        }
-
-        function renderOrders() {
-            let tbody = document.getElementById('orderTableBody');
-            tbody.innerHTML = '';
-
-            let filtered = currentFilter === 'Tất cả' ? orders : orders.filter(o => o.status === currentFilter);
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">Chưa có đơn hàng nào trong danh mục này.</td></tr>`;
-                return;
-            }
-
-            filtered.forEach(o => {
-                let badgeClass = 'badge-pending';
-                if (o.status === 'Đang cày') badgeClass = 'badge-working';
-                else if (o.status === 'Hoàn thành') badgeClass = 'badge-completed';
-                else if (o.status === 'Đã hủy') badgeClass = 'badge-cancelled';
-
-                let tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="fw-bold text-muted">#${o.id}</td>
-                    <td>
-                        <div class="d-flex flex-column align-items-center gap-1">
-                            <span class="credential-box"><i class="fa-solid fa-user me-1 text-primary"></i>${o.username} <i class="fa-regular fa-copy ms-1 text-muted cursor-pointer" onclick="copyText('${o.username}')"></i></span>
-                            <span class="credential-box"><i class="fa-solid fa-key me-1 text-warning"></i>${o.password} <i class="fa-regular fa-copy ms-1 text-muted cursor-pointer" onclick="copyText('${o.password}')"></i></span>
-                        </div>
-                    </td>
-                    <td><span class="${o.two_fa ? 'credential-box text-danger' : 'text-muted fs-7'}">${o.two_fa || 'Không có'}</span></td>
-                    <td class="text-start fw-semibold text-light">${o.content}</td>
-                    <td class="fw-bold text-success fs-6">${Number(o.price).toLocaleString('vi-VN')} đ</td>
-                    <td><span class="badge-status ${badgeClass}">${o.status}</span></td>
-                    <td>
-                        <div class="d-flex justify-content-center gap-1">
-                            <button class="btn btn-action-icon btn-outline-info" onclick="updateStatus(${o.id}, 'Đang cày')" title="Nhận cày"><i class="fa-solid fa-play"></i></button>
-                            <button class="btn btn-action-icon btn-outline-success" onclick="updateStatus(${o.id}, 'Hoàn thành')" title="Hoàn thành & Cộng tiền"><i class="fa-solid fa-check"></i></button>
-                            <button class="btn btn-action-icon btn-outline-warning" onclick="updateStatus(${o.id}, 'Đã hủy')" title="Hủy đơn"><i class="fa-solid fa-ban"></i></button>
-                            <button class="btn btn-action-icon btn-outline-danger" onclick="deleteOrder(${o.id})" title="Xóa đơn"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        document.getElementById('orderForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            let newOrder = {
-                id: orders.length > 0 ? Math.max(...orders.map(o => o.id)) + 1 : 101,
-                username: document.getElementById('username').value.trim(),
-                password: document.getElementById('password').value.trim(),
-                two_fa: document.getElementById('two_fa').value.trim(),
-                price: Number(document.getElementById('price').value),
-                content: document.getElementById('content').value.trim(),
-                status: 'Chờ duyệt'
-            };
-            orders.unshift(newOrder);
-            saveAndRender();
-            this.reset();
-        });
-
-        function updateStatus(id, newStatus) {
-            let order = orders.find(o => Number(o.id) === Number(id));
-            if (order) {
-                order.status = newStatus;
-                saveAndRender();
-            }
-        }
-
-        function deleteOrder(id) {
-            if (confirm('Bạn có chắc chắn muốn xóa đơn hàng này khỏi danh sách?')) {
-                orders = orders.filter(o => Number(o.id) !== Number(id));
-                saveAndRender();
-            }
-        }
-
-        function filterOrders(status) {
-            currentFilter = status;
-            let buttons = document.querySelectorAll('#filterGroup button');
-            buttons.forEach(btn => {
-                if (btn.innerText.includes(status)) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            renderOrders();
-        }
-
-        // Script Up Key Functions
-        function upKeyRealkidMain() {
-            let key = document.getElementById('key-realkid-main').value.trim();
-            document.getElementById('script-realkid-main').innerText = `getgenv().Key = "${key}"\nloadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/main.lua"))()`;
-            alert('Đã cập nhật Key vào Realkid Main!');
-        }
-
-        function upKeyRealkidKaitunAll() {
-            let key = document.getElementById('key-realkid-kaitun-chung').value.trim();
-            
-            document.getElementById('script-realkid-kaitun-1').innerText = `getgenv().Configs = {
-    ["Key"] = "${key}";
-    ["Quest"] = {
-      
+      }
     };
-    Sword = {
+  }
 
-    };
-    Gun = {
-  
-    };
-    ["Auto Active Race V4"] = true;
-    ["FPS Limit"] = 60;
-    ["Boost FPS"] = true;
-    ["Hop Near"] = {Enabled = false; Distance = 500;};
-    ["Webhook"] = {
-        ["URL"] = ""; 
-        ["Interval"] = 300; 
-    };
+  return {
+    makeStore,
+    login: (n, p) => A.signInWithEmailAndPassword(auth, toEmail(n), p),
+    register: (n, p) => A.createUserWithEmailAndPassword(auth, toEmail(n), p),
+    logout: () => A.signOut(auth),
+    onUser: f => A.onAuthStateChanged(auth, f)
+  };
+}
+
+const AUTH_ERR = {
+  'auth/invalid-credential': 'Sai tài khoản hoặc mật khẩu.',
+  'auth/wrong-password': 'Sai tài khoản hoặc mật khẩu.',
+  'auth/user-not-found': 'Sai tài khoản hoặc mật khẩu.',
+  'auth/email-already-in-use': 'Tên tài khoản này đã có người dùng.',
+  'auth/weak-password': 'Mật khẩu cần ít nhất 6 ký tự.',
+  'auth/invalid-email': 'Tên tài khoản không hợp lệ.',
+  'auth/network-request-failed': 'Không có mạng, thử lại nhé.',
+  'auth/too-many-requests': 'Thử quá nhiều lần, đợi một lúc rồi thử lại.',
+  'auth/operation-not-allowed': 'Chưa bật Email/Password trong Firebase Authentication (xem README).',
+  'auth/configuration-not-found': 'Chưa bật Authentication trong Firebase (xem README).',
+  'auth/admin-restricted-operation': 'Việc tạo tài khoản mới đang bị tắt.'
 };
-loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/kaitun.lua"))()`;
 
-            document.getElementById('script-realkid-kaitun-2').innerText = `getgenv().Configs = {
-    ["Key"] = "${key}";
-    ["Quest"] = {
-        ["Evo Race V1"] = true;
-        ["Evo Race V2"] = true;
-     
-        ["Pull Lerver"] = true;
-    };
-    Sword = {
-      
-        "Yama";
-        "Tushita";
-        "Cursed Dual Katana";
-    };
-    Gun = {
-        "Skull Guitar";
+/* ================================================================
+   GIAO DIỆN
+   ================================================================ */
+let store = null;
+let orders = [];
+let keys = {};
+let filter = 'all';
+let query = '';
+let limit = 100;
+let lastAddedId = null;
+let legacy = [];
 
-    };
-    ["Auto Active Race V4"] = true;
-    ["FPS Limit"] = 60;
-    ["Boost FPS"] = true;
-    ["Hop Near"] = {Enabled = false; Distance = 500;};
-    ["Webhook"] = {
-        ["URL"] = ""; 
-        ["Interval"] = 300; 
-    };
-};
-loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/kaitun.lua"))()`;
+/* ----- tab ----- */
+function showTab(name) {
+  ['orders', 'scripts'].forEach(n => {
+    $('#view-' + n).hidden = n !== name;
+    $('#tab-' + n).setAttribute('aria-selected', String(n === name));
+  });
+  try { history.replaceState(null, '', '#' + name); } catch (e) {}
+}
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
 
-            alert('Đã cập nhật Key chung vào cả 2 Config Realkid Kaitun thành công!');
-        }
+/* ----- số liệu chạy ----- */
+function tween(sel, to, f = String) {
+  const el = $(sel);
+  const from = parseFloat(el.dataset.v || '0') || 0;
+  const id = el._tw = (el._tw || 0) + 1;
+  el.dataset.v = to;
+  if (reduce || from === to || document.hidden) { el.textContent = f(to); return; }
+  const t0 = performance.now(), dur = 600;
+  const step = t => {
+    if (el._tw !== id) return;
+    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = f(Math.round(from + (to - from) * e));
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
 
-        function copyScript(elementId) {
-            let text = document.getElementById(elementId).innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Đã sao chép mã script vào bộ nhớ tạm!');
-            });
-        }
+function renderStats() {
+  let rev = 0, p = 0, r = 0;
+  for (const o of orders) {
+    if (o.status === 'done') rev += Number(o.price) || 0;
+    else if (o.status === 'pending') p++;
+    else if (o.status === 'running') r++;
+  }
+  tween('#st-total', orders.length);
+  tween('#st-rev', rev, n => fmt.format(n));
+  tween('#st-pending', p);
+  tween('#st-running', r);
+}
 
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert('Đã sao chép: ' + text);
-            });
-        }
+function renderFilters() {
+  const counts = { all: orders.length };
+  for (const o of orders) counts[o.status] = (counts[o.status] || 0) + 1;
+  const box = $('#filters'); box.textContent = '';
+  [['all', 'Tất cả'], ...STATUS.map(s => [s[0], s[1]])].forEach(([id, label]) => {
+    box.append(h('button', { class: 'chip', type: 'button', 'aria-pressed': String(filter === id),
+      onclick() { filter = id; limit = 100; render(); } }, label, h('b', { text: String(counts[id] || 0) })));
+  });
+}
 
-        // Init Run
-        saveAndRender();
-    </script>
+function credLine(label, value, secret) {
+  if (!value) return h('div', {}, h('span', { class: 'k', text: label }), h('span', { class: 'dash', text: '—' }));
+  const span = h('span', { class: 'v', text: secret ? '••••••••' : value });
+  const line = h('div', {}, h('span', { class: 'k', text: label }), span);
+  if (secret) {
+    let vis = false;
+    line.append(h('button', { type: 'button', text: 'hiện', onclick(ev) {
+      vis = !vis; span.textContent = vis ? value : '••••••••'; ev.target.textContent = vis ? 'ẩn' : 'hiện';
+    } }));
+  }
+  line.append(h('button', { type: 'button', text: 'copy', onclick() { copy(value, label === 'TK' ? 'Đã copy tài khoản' : 'Đã copy mật khẩu'); } }));
+  return line;
+}
+
+function renderRows() {
+  const q = query.trim().toLowerCase();
+  const list = orders.filter(o =>
+    (filter === 'all' || o.status === filter) &&
+    (!q || (o.user || '').toLowerCase().includes(q) || (o.detail || '').toLowerCase().includes(q)));
+
+  const body = $('#rows');
+  const frag = document.createDocumentFragment();
+  const shown = list.slice(0, limit);
+
+  shown.forEach(o => {
+    const d = o.at ? new Date(o.at) : null;
+    const date = d ? String(d.getDate()).padStart(2, '0') + '/' + String(d.getMonth() + 1).padStart(2, '0') : '';
+    const status = STATUS_MAP[o.status] ? o.status : 'pending';
+
+    const sel = h('select', { class: 'sel', 'aria-label': 'Trạng thái đơn #' + (o.no || '') });
+    STATUS.forEach(s => sel.append(h('option', { value: s[0], text: s[1], ...(s[0] === status ? { selected: '' } : {}) })));
+    const st = h('span', { class: 'st' + (status === 'running' ? ' running' : '') }, sel);
+    st.style.setProperty('--c', STATUS_MAP[status][2]);
+    sel.addEventListener('change', () => store.setStatus(o.id, sel.value));
+
+    frag.append(h('tr', { class: o.id === lastAddedId ? 'new' : '' },
+      h('td', { class: 'id c-id' }, '#' + String(o.no || 0).padStart(3, '0'), h('small', { text: date })),
+      h('td', { class: 'c-cred' }, h('div', { class: 'cred' }, credLine('TK', o.user, false), credLine('MK', o.pass, true))),
+      h('td', { class: 'c-tfa' + (o.tfa ? '' : ' none') }, o.tfa ? h('div', { class: 'cred' }, credLine('', o.tfa, false)) : h('span', { class: 'dash', text: '—' })),
+      h('td', { class: 'c-detail' }, h('div', { class: 'detail', title: o.detail || '', text: o.detail || '' })),
+      h('td', { class: 'price c-price', text: fmt.format(Number(o.price) || 0) + ' đ' }),
+      h('td', { class: 'c-st' }, st),
+      h('td', { class: 'c-del' }, h('button', { class: 'del', type: 'button', 'aria-label': 'Xóa đơn', title: 'Xóa đơn', text: '×', onclick() {
+        if (confirm('Xóa đơn #' + (o.no || '') + ' (' + o.user + ')?')) store.remove(o.id);
+      } }))
+    ));
+  });
+
+  body.replaceChildren(frag);
+  $('#empty').hidden = list.length > 0;
+  $('#empty-sub').textContent = orders.length
+    ? 'Không có đơn nào khớp bộ lọc hiện tại.'
+    : 'Điền form bên cạnh để tạo đơn đầu tiên.';
+  const more = $('#more');
+  more.hidden = list.length <= limit;
+  more.textContent = 'Xem thêm (' + (list.length - limit) + ' đơn)';
+}
+
+function render() { renderStats(); renderFilters(); renderRows(); }
+
+$('#more').addEventListener('click', () => { limit += 100; renderRows(); });
+let qTimer;
+$('#q').addEventListener('input', e => {
+  clearTimeout(qTimer);
+  qTimer = setTimeout(() => { query = e.target.value; limit = 100; renderRows(); }, 120);
+});
+
+/* ----- form tạo đơn ----- */
+bindPw($('#pw-toggle'), $('#f-pass'));
+$('#form').addEventListener('submit', e => {
+  e.preventDefault();
+  if (!store) return;
+  const price = parseInt($('#f-price').value, 10);
+  if (isNaN(price) || price < 0) { toast('Giá tiền không hợp lệ'); return; }
+  lastAddedId = store.add({
+    user: $('#f-user').value.trim(),
+    pass: $('#f-pass').value,
+    tfa: $('#f-2fa').value.trim(),
+    detail: $('#f-detail').value.trim(),
+    price,
+    status: 'pending'
+  });
+  e.target.reset();
+  $('#f-pass').type = 'password'; $('#pw-toggle').textContent = 'Hiện';
+  filter = 'all'; query = ''; $('#q').value = '';
+  toast('Đã lưu đơn');
+  render(); /* chạy hiệu ứng đơn mới ngay (chế độ local phát dữ liệu trước khi có id) */
+  setTimeout(() => { lastAddedId = null; }, 1200);
+});
+
+/* ----- nhập đơn cũ từ máy này lên tài khoản ----- */
+function readLegacy() {
+  const out = [];
+  for (const k of ['bfm_orders_v2', 'blox_orders_v2']) {
+    const arr = load(k, []);
+    if (Array.isArray(arr)) arr.forEach(o => out.push(normLegacy(o)));
+  }
+  return out.filter(o => o.user || o.detail).sort((a, b) => (a.at - b.at) || (a.no - b.no));
+}
+function renderNotice() {
+  const box = $('#notice'); box.textContent = '';
+  if (!store || store.mode !== 'cloud' || !legacy.length || load('bfm_import_dismissed', false)) return;
+  const importBtn = h('button', { class: 'ghost solid', type: 'button', text: 'Nhập vào tài khoản', async onclick() {
+    importBtn.disabled = true; importBtn.textContent = 'Đang nhập…';
+    try {
+      await store.importMany(legacy);
+      for (const k of ['bfm_orders_v2', 'blox_orders_v2']) {
+        try { const v = localStorage.getItem(k); if (v) { localStorage.setItem(k + '_imported', v); localStorage.removeItem(k); } } catch (e) {}
+      }
+      toast('Đã nhập ' + legacy.length + ' đơn'); legacy = []; renderNotice();
+    } catch (e) {
+      importBtn.disabled = false; importBtn.textContent = 'Nhập vào tài khoản';
+      toast('Nhập thất bại: ' + (e.code || e.message));
+    }
+  } });
+  box.append(h('div', { class: 'notice' },
+    h('span', { text: 'Tìm thấy ' + legacy.length + ' đơn đang lưu trên máy này (chưa có trong tài khoản).' }),
+    h('div', {}, importBtn, h('button', { class: 'ghost', type: 'button', text: 'Bỏ qua', onclick() { save('bfm_import_dismissed', true); renderNotice(); } }))));
+}
+
+/* ----- kho script ----- */
+const KEY = '__KEY__';
+const GROUPS = [
+  { id: 'realkid-main', title: 'Realkid Main', sub: 'script chính', keyLabel: 'Key Realkid',
+    blocks: [{ label: 'Script', tpl:
+'getgenv().Key = "' + KEY + '"\n' +
+'loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/main.lua"))()' }] },
+  { id: 'realkid-kaitun', title: 'Realkid Kaitun', sub: '2 config, dùng chung 1 key', keyLabel: 'Key chung',
+    blocks: [
+      { label: 'Config 1 — GodMax', tpl:
+'getgenv().Configs = {\n' +
+'    ["Key"] = "' + KEY + '"; -- để trống để dùng key đã lưu hoặc nhập qua UI\n' +
+'    ["Quest"] = {\n\n    };\n' +
+'    Sword = {\n\n    };\n' +
+'    Gun = {\n\n    };\n' +
+'    ["Auto Active Race V4"] = true;\n' +
+'    ["FPS Limit"] = 60;\n' +
+'    ["Boost FPS"] = true;\n' +
+'    ["Hop Near"] = {Enabled = false; Distance = 500;}; -- hop khi có người chơi khác ở gần\n' +
+'    ["Webhook"] = {\n' +
+'        ["URL"] = ""; -- Discord webhook URL; để trống để tắt\n' +
+'        ["Interval"] = 300; -- gửi báo cáo mỗi 300 giây\n' +
+'    };\n' +
+'};\n' +
+'loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/kaitun.lua"))()' },
+      { label: 'Config 2 — Godhuman, CDK, Skull Guitar, Pull Lever', tpl:
+'getgenv().Configs = {\n' +
+'    ["Key"] = "' + KEY + '"; -- để trống để dùng key đã lưu hoặc nhập qua UI\n' +
+'    ["Quest"] = {\n' +
+'        ["Evo Race V1"] = true;\n' +
+'        ["Evo Race V2"] = true;\n\n' +
+'        ["Pull Lerver"] = true;\n' +
+'    };\n' +
+'    Sword = {\n\n' +
+'        "Yama";\n' +
+'        "Tushita";\n' +
+'        "Cursed Dual Katana";\n' +
+'    };\n' +
+'    Gun = {\n' +
+'        "Skull Guitar";\n\n' +
+'    };\n' +
+'    ["Auto Active Race V4"] = true;\n' +
+'    ["FPS Limit"] = 60;\n' +
+'    ["Boost FPS"] = true;\n' +
+'    ["Hop Near"] = {Enabled = false; Distance = 500;}; -- hop khi có người chơi khác ở gần\n' +
+'    ["Webhook"] = {\n' +
+'        ["URL"] = ""; -- Discord webhook URL; để trống để tắt\n' +
+'        ["Interval"] = 300; -- gửi báo cáo mỗi 300 giây\n' +
+'    };\n' +
+'};\n' +
+'loadstring(game:HttpGet("https://raw.githubusercontent.com/realkidhub/realkid/refs/heads/main/kaitun.lua"))()' }
+    ] },
+  { id: 'night-main', title: 'Night Hub Main', sub: 'key free', keyLabel: 'Key (để trống = FREEMIUM)',
+    blocks: [{ label: 'Script', tpl:
+'script_key = "' + KEY + '" -- mặc định là FREEMIUM\n' +
+'loadstring(game:HttpGet("https://raw.githubusercontent.com/WhiteX1208/Scripts/refs/heads/main/BF-Main.luau"))()' }] },
+  { id: 'night-hop', title: 'Night Hub Hop Boss', sub: 'săn boss',
+    blocks: [{ label: 'Script', tpl:
+'getgenv().Team = "Marines" -- Marines hoặc Pirates\n' +
+'loadstring(game:HttpGet("https://raw.githubusercontent.com/WhiteX1208/Scripts/refs/heads/main/HopScript.luau"))()' }] }
+];
+
+const cleanKey = k => (k || '').replace(/["\\\r\n]/g, '').trim();
+
+function highlight(code) {
+  const frag = document.createDocumentFragment();
+  const lines = code.split('\n');
+  lines.forEach((line, i) => {
+    const ci = line.indexOf('--');
+    const body = ci >= 0 ? line.slice(0, ci) : line;
+    const com = ci >= 0 ? line.slice(ci) : '';
+    const re = /("[^"]*")|\b(getgenv|loadstring|game|HttpGet|true|false)\b/g;
+    let last = 0, m;
+    while ((m = re.exec(body))) {
+      if (m.index > last) frag.append(body.slice(last, m.index));
+      frag.append(h('span', { class: m[1] ? 's' : 'k', text: m[0] }));
+      last = re.lastIndex;
+    }
+    if (last < body.length) frag.append(body.slice(last));
+    if (com) frag.append(h('span', { class: 'c', text: com }));
+    if (i < lines.length - 1) frag.append('\n');
+  });
+  return frag;
+}
+
+const keyViews = []; /* {gid, input, pres} */
+function renderScripts() {
+  const root = $('#view-scripts'); root.textContent = '';
+  GROUPS.forEach(g => {
+    const sec = h('div', { class: 'sgroup' });
+    sec.append(h('header', {}, h('h3', {}, g.title, h('small', { text: g.sub }))));
+    const view = { gid: g.id, input: null, pres: [] };
+    if (g.keyLabel) {
+      const inp = h('input', { class: 'inp', id: 'key-' + g.id, placeholder: 'dán key vào đây', spellcheck: 'false', autocomplete: 'off' });
+      view.input = inp;
+      sec.append(h('div', { class: 'keybar' }, h('label', { for: 'key-' + g.id, text: g.keyLabel }), inp));
+      inp.addEventListener('input', () => {
+        keys[g.id] = inp.value;
+        if (store) store.setKey(g.id, inp.value);
+        view.pres.forEach(p => p.update());
+      });
+    }
+    g.blocks.forEach(b => {
+      const pre = h('pre');
+      const api = {
+        text: () => b.tpl.split(KEY).join(cleanKey(keys[g.id])),
+        update() { pre.replaceChildren(highlight(api.text())); }
+      };
+      api.update(); view.pres.push(api);
+      const btn = h('button', { class: 'ghost', type: 'button', text: 'Copy', onclick() {
+        copy(api.text(), 'Đã copy script');
+        btn.textContent = 'Đã copy'; btn.classList.add('ok');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('ok'); }, 1200);
+      } });
+      sec.append(h('div', { class: 'block' }, h('div', { class: 'bhead' }, h('span', { text: b.label }), btn), pre));
+    });
+    keyViews.push(view);
+    root.append(sec);
+  });
+}
+function refreshKeys() {
+  keyViews.forEach(v => {
+    if (v.input && document.activeElement !== v.input) v.input.value = keys[v.gid] || '';
+    v.pres.forEach(p => p.update());
+  });
+}
+
+/* ----- trạng thái đồng bộ ----- */
+const SYNC_TEXT = { ok: 'Đã đồng bộ', pending: 'Đang đồng bộ…', offline: 'Ngoại tuyến', error: 'Lỗi đồng bộ', local: 'Lưu trên máy này' };
+let lastSync = 'ok';
+function setSync(s) {
+  lastSync = s;
+  const el = $('#sync');
+  const eff = (s !== 'error' && s !== 'local' && !navigator.onLine) ? 'offline' : s;
+  el.dataset.s = eff; el.textContent = SYNC_TEXT[eff];
+}
+addEventListener('online', () => setSync(lastSync));
+addEventListener('offline', () => setSync(lastSync));
+
+/* ----- gắn store vào giao diện ----- */
+function attach(s) {
+  store = s;
+  s.onOrders(list => {
+    const first = !orders.length && list.length;
+    orders = list; render();
+    if (first) renderNotice();
+  });
+  s.onKeys(k => { keys = { ...k }; refreshKeys(); });
+  s.onSync(setSync);
+  legacy = s.mode === 'cloud' ? readLegacy() : [];
+  renderNotice();
+  s.start();
+}
+function detach() {
+  if (store) store.stop();
+  store = null; orders = []; keys = {}; legacy = [];
+  render(); refreshKeys(); renderNotice();
+}
+
+/* ----- hộp đăng nhập ----- */
+let gateMode = 'login';
+function setGateMode(m) {
+  gateMode = m;
+  $('#seg-login').setAttribute('aria-selected', String(m === 'login'));
+  $('#seg-register').setAttribute('aria-selected', String(m === 'register'));
+  $('#g-confirm-wrap').hidden = m !== 'register';
+  $('#g-pass').autocomplete = m === 'register' ? 'new-password' : 'current-password';
+  $('#g-submit').textContent = m === 'register' ? 'Tạo tài khoản' : 'Đăng nhập';
+  $('#g-err').textContent = '';
+}
+function showGate(on) {
+  $('#gate').hidden = !on;
+  document.body.classList.toggle('locked', on);
+  if (on) setTimeout(() => $('#g-user').focus(), 50);
+}
+$('#seg-login').addEventListener('click', () => setGateMode('login'));
+$('#seg-register').addEventListener('click', () => setGateMode('register'));
+bindPw($('#g-toggle'), $('#g-pass'));
+
+/* ----- khởi động ----- */
+function startBackground() {
+  const sea = $('#sea');
+  if (reduce) return;
+  const n = innerWidth < 700 ? 7 : 14;
+  for (let i = 0; i < n; i++) {
+    const b = h('i', { class: 'bub' }), s = 4 + Math.random() * 14;
+    b.style.cssText = `left:${(Math.random() * 100).toFixed(1)}%;width:${s.toFixed(1)}px;height:${s.toFixed(1)}px;` +
+      `animation-duration:${(12 + Math.random() * 16).toFixed(1)}s;animation-delay:-${(Math.random() * 20).toFixed(1)}s`;
+    sea.append(b);
+  }
+  document.addEventListener('visibilitychange', () => document.documentElement.classList.toggle('paused', document.hidden));
+}
+
+function startLocal(note) {
+  $('#acct').hidden = false; $('#who').hidden = true; $('#logout').hidden = true;
+  setSync('local');
+  if (note) toast(note);
+  attach(createLocalStore());
+  document.body.classList.remove('booting');
+}
+
+async function startCloud() {
+  let cloud;
+  try { cloud = await createCloud(); }
+  catch (e) { startLocal('Không tải được Firebase, đang dùng chế độ lưu trên máy này'); return; }
+
+  $('#logout').addEventListener('click', () => cloud.logout());
+  $('#gate-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const err = $('#g-err'), btn = $('#g-submit');
+    const name = $('#g-user').value.trim(), pass = $('#g-pass').value;
+    err.textContent = '';
+    if (!/^[a-z0-9._@-]{3,60}$/i.test(name)) { err.textContent = 'Tên tài khoản 3–30 ký tự: chữ, số, dấu . _ -'; return; }
+    if (pass.length < 6) { err.textContent = 'Mật khẩu cần ít nhất 6 ký tự.'; return; }
+    if (gateMode === 'register' && pass !== $('#g-confirm').value) { err.textContent = 'Hai mật khẩu không khớp.'; return; }
+    btn.disabled = true; const label = btn.textContent; btn.textContent = 'Đang xử lý…';
+    try {
+      await (gateMode === 'register' ? cloud.register(name, pass) : cloud.login(name, pass));
+      $('#g-pass').value = ''; $('#g-confirm').value = '';
+    } catch (ex) {
+      err.textContent = AUTH_ERR[ex.code] || ('Lỗi: ' + (ex.code || ex.message));
+    } finally { btn.disabled = false; btn.textContent = label; }
+  });
+
+  cloud.onUser(user => {
+    detach();
+    if (user) {
+      showGate(false);
+      const s = cloud.makeStore(user);
+      $('#acct').hidden = false; $('#who').hidden = false; $('#logout').hidden = false;
+      $('#who').textContent = s.name; setSync('pending');
+      attach(s);
+    } else {
+      $('#acct').hidden = true;
+      showGate(true);
+    }
+    document.body.classList.remove('booting');
+  });
+}
+
+renderScripts();
+startBackground();
+render();
+if (location.hash === '#scripts') showTab('scripts');
+if (WANT_CLOUD) startCloud(); else startLocal();
+</script>
 </body>
 </html>
