@@ -45,13 +45,49 @@ button:disabled{opacity:.6;cursor:default}
  
 /* ===== biển ===== */
 .sea{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.lay{position:absolute;inset:0;will-change:transform;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.lay.far{transform:translate(calc(var(--px,0)*-6px),calc(var(--py,0)*-4px))}
+.lay.mid{transform:translate(calc(var(--px,0)*-16px),calc(var(--py,0)*-10px))}
+.lay.near{transform:translate(calc(var(--px,0)*-30px),calc(var(--py,0)*-18px))}
 .whale{position:absolute;color:var(--accent);will-change:transform}
-.whale svg{display:block;width:100%;height:auto;animation:bob 8s ease-in-out infinite}
-.w1{top:14%;left:0;width:min(560px,70vw);opacity:.12;animation:swimR 150s linear infinite;animation-delay:-35s}
-.w2{top:60%;right:0;width:min(340px,52vw);opacity:.09;animation:swimL 105s linear infinite;animation-delay:-45s}
-.w3{top:38%;left:0;width:min(190px,38vw);opacity:.07;animation:swimR 85s linear infinite;animation-delay:-60s}
-.w2 svg{animation-delay:-3s}
-.w3 svg{animation-duration:6s}
+.whale svg{display:block;width:100%;height:auto;overflow:visible;animation:bob var(--bob,8s) ease-in-out infinite}
+.whale .tail,.breach .tail{transform-origin:306px 102px;animation:tail var(--sp,3.2s) ease-in-out infinite}
+.whale .fin,.breach .fin{transform-origin:125px 138px;animation:flap calc(var(--sp,3.2s)*1.3) ease-in-out infinite}
+@keyframes tail{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(9deg)}}
+@keyframes flap{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(12deg)}}
+.calf{position:absolute;width:36%}
+.blo{position:absolute;width:7px;height:7px;border-radius:50%;border:1px solid rgba(160,215,255,.5);background:radial-gradient(circle at 30% 30%,rgba(190,230,255,.4),transparent 65%);opacity:0;animation:blow 5s ease-out infinite}
+@keyframes blow{0%{transform:translate(0,0) scale(.4);opacity:0}15%{opacity:.9}100%{transform:translate(var(--bx,6px),-80px) scale(1.6);opacity:0}}
+ 
+/* cá voi phóng lên mặt nước */
+.breach{position:absolute;left:58%;top:26%;width:min(330px,60vw);opacity:0;color:var(--accent);animation:breach 46s linear infinite;animation-delay:-29.7s;will-change:transform}
+.breach svg{display:block;width:100%;height:auto;overflow:visible}
+@keyframes breach{
+  0%,80%{transform:translate(0,85vh) rotate(64deg);opacity:0}
+  81%{opacity:.22}
+  86%{transform:translate(-5vw,18vh) rotate(30deg)}
+  89%{transform:translate(-9vw,0) rotate(0deg)}
+  92%{transform:translate(-13vw,14vh) rotate(-32deg)}
+  97%{transform:translate(-18vw,85vh) rotate(-66deg);opacity:.22}
+  98%,100%{transform:translate(-18vw,85vh) rotate(-66deg);opacity:0}}
+.splash{position:absolute;bottom:60px;width:1px;height:1px}
+.splash i{position:absolute;left:0;top:0;width:5px;height:5px;border-radius:50%;background:rgba(170,215,255,.6);opacity:0;animation:dropA 46s linear infinite;animation-delay:-29.7s}
+.splash.b i{animation-name:dropB}
+.splash i:nth-child(2){animation-delay:-29.62s}.splash i:nth-child(3){animation-delay:-29.55s}.splash i:nth-child(4){animation-delay:-29.48s}
+@keyframes dropA{0%,81%{opacity:0;transform:translate(0,0)}81.6%{opacity:.8}84%{opacity:.6;transform:translate(var(--dx),-90px)}86.5%{opacity:0;transform:translate(calc(var(--dx)*1.5),0)}100%{opacity:0}}
+@keyframes dropB{0%,95.5%{opacity:0;transform:translate(0,0)}96%{opacity:.8}98%{opacity:.6;transform:translate(var(--dx),-90px)}99.6%{opacity:0;transform:translate(calc(var(--dx)*1.5),0)}100%{opacity:0}}
+ 
+/* tia nắng + sinh vật phù du */
+.rays{position:absolute;inset:0 0 30% 0;overflow:hidden}
+.ray{position:absolute;top:-10%;width:150px;height:115%;transform-origin:50% 0;background:linear-gradient(90deg,transparent,rgba(150,205,255,.1),transparent);-webkit-mask-image:linear-gradient(180deg,#000,transparent 88%);mask-image:linear-gradient(180deg,#000,transparent 88%);animation:ray 16s ease-in-out infinite alternate}
+.ray:nth-child(1){left:6%;width:120px;animation-duration:15s}
+.ray:nth-child(2){left:26%;width:190px;animation-duration:19s;animation-delay:-6s}
+.ray:nth-child(3){left:50%;width:140px;animation-duration:17s;animation-delay:-11s}
+.ray:nth-child(4){left:70%;width:200px;animation-duration:21s;animation-delay:-3s}
+.ray:nth-child(5){left:88%;width:130px;animation-duration:14s;animation-delay:-8s}
+@keyframes ray{from{transform:rotate(13deg);opacity:.4}to{transform:rotate(21deg);opacity:1}}
+.pl{position:absolute;border-radius:50%;background:rgba(190,225,255,.55);opacity:0;animation:drift linear infinite}
+@keyframes drift{0%{transform:translate(0,0);opacity:0}15%{opacity:.7}85%{opacity:.45}100%{transform:translate(var(--dx,30px),-90px);opacity:0}}
 @keyframes swimR{from{transform:translateX(-110%)}to{transform:translateX(100vw)}}
 @keyframes swimL{from{transform:translateX(110%)}to{transform:translateX(-100vw)}}
 @keyframes bob{0%,100%{transform:translateY(0) rotate(-1.4deg)}50%{transform:translateY(-16px) rotate(1.4deg)}}
@@ -284,6 +320,22 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
   .c-st{grid-column:2;grid-row:5}
   .id small{display:inline;margin-left:8px}
 }
+/* ===== tinh chỉnh giao diện ===== */
+.top{box-shadow:0 12px 30px -22px rgba(0,0,0,.7)}
+.brand b{background:linear-gradient(90deg,#e6edf7,#7fc0ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat{position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.stat::after{content:"";position:absolute;left:0;top:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:.45}
+.stat:hover{border-color:#2a5384;box-shadow:0 14px 34px -22px rgba(59,156,255,.6)}
+.stat.money strong{text-shadow:0 0 26px rgba(59,156,255,.35)}
+tbody tr{transition:background .15s}
+tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+.phone{transition:transform .2s,border-color .2s}
+.phone:hover{transform:translateY(-3px);border-color:#2a5384}
+.empty .ew{display:block;width:96px;height:48px;margin:0 auto 14px;color:var(--accent);opacity:.5;animation:bob 6s ease-in-out infinite}
+.card{background:linear-gradient(180deg,rgba(59,156,255,.07),transparent 38%),var(--panel)}
+@media (max-width:700px){
+  .lay.far,.ray:nth-child(n+4){display:none}
+}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
@@ -294,19 +346,29 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
  
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
   <defs>
-    <symbol id="whale" viewBox="0 0 400 200">
-      <path fill="currentColor" d="M14 112C14 70 70 38 150 40C230 42 285 78 335 80C350 62 372 52 392 54C384 70 372 80 360 86C374 96 388 112 392 130C372 128 352 118 336 100C290 140 220 168 150 166C70 164 14 150 14 112Z"/>
-      <path fill="currentColor" opacity=".7" d="M120 140C140 170 175 190 205 193C194 170 178 150 162 140Z"/>
-      <path d="M22 118C52 128 92 130 132 124" fill="none" stroke="#0a1424" stroke-width="3" stroke-linecap="round" opacity=".45"/>
-      <circle cx="64" cy="100" r="4" fill="#0a1424" opacity=".55"/>
-    </symbol>
+    <g id="w-body">
+      <path fill="currentColor" d="M20 118C20 72 84 44 162 46C232 48 282 70 318 92L318 114C282 142 222 168 152 166C72 164 20 152 20 118Z"/>
+      <path fill="#fff" opacity=".16" d="M34 128C74 152 150 162 214 150C256 142 290 124 316 108L316 114C282 142 222 168 152 166C84 164 40 150 34 128Z"/>
+      <path d="M60 140C100 156 160 158 210 148M80 150C120 162 170 162 214 154M100 156C132 166 178 166 222 158" fill="none" stroke="#0a1424" stroke-width="1.6" stroke-linecap="round" opacity=".22"/>
+      <path d="M24 124C54 136 92 138 128 130" fill="none" stroke="#0a1424" stroke-width="2.4" stroke-linecap="round" opacity=".4"/>
+      <circle cx="66" cy="106" r="4" fill="#0a1424" opacity=".6"/>
+      <circle cx="67.2" cy="104.8" r="1.2" fill="#fff" opacity=".7"/>
+    </g>
+    <g id="w-tail"><path fill="currentColor" d="M308 90C330 86 348 78 360 62C370 50 386 46 398 48C392 62 386 74 378 84C390 94 394 110 396 126C380 120 364 112 350 104C338 110 324 114 308 114Z"/></g>
+    <g id="w-fin"><path fill="currentColor" stroke="#0a1424" stroke-opacity=".28" stroke-width="1.5" d="M122 136C146 148 166 172 162 192C140 184 120 162 112 142Z"/></g>
+    <symbol id="whale" viewBox="0 0 400 200"><use href="#w-body"/><use href="#w-tail"/><use href="#w-fin"/></symbol>
   </defs>
 </svg>
  
 <div class="sea" id="sea" aria-hidden="true">
-  <div class="whale w1"><svg viewBox="0 0 400 200"><use href="#whale" transform="translate(400 0) scale(-1 1)"/></svg></div>
-  <div class="whale w2"><svg viewBox="0 0 400 200"><use href="#whale"/></svg></div>
-  <div class="whale w3"><svg viewBox="0 0 400 200"><use href="#whale" transform="translate(400 0) scale(-1 1)"/></svg></div>
+  <div class="rays"><i class="ray"></i><i class="ray"></i><i class="ray"></i><i class="ray"></i><i class="ray"></i></div>
+  <div id="plank"></div>
+  <div class="lay far" id="lay-far"></div>
+  <div class="lay mid" id="lay-mid"></div>
+  <div class="breach"><svg viewBox="0 0 400 200"><use href="#w-body"/><use class="tail" href="#w-tail"/><use class="fin" href="#w-fin"/></svg></div>
+  <div class="splash" style="left:calc(58% + 150px)"><i style="--dx:-30px"></i><i style="--dx:-10px"></i><i style="--dx:14px"></i><i style="--dx:34px"></i></div>
+  <div class="splash b" style="left:calc(42% + 150px)"><i style="--dx:-34px"></i><i style="--dx:-12px"></i><i style="--dx:10px"></i><i style="--dx:30px"></i></div>
+  <div class="lay near" id="lay-near"></div>
   <div class="waves">
     <svg class="wv a" viewBox="0 0 2880 120" preserveAspectRatio="none"><path d="M0 60C180 20 540 100 720 60C900 20 1260 100 1440 60C1620 20 1980 100 2160 60C2340 20 2700 100 2880 60V120H0Z"/></svg>
     <svg class="wv b" viewBox="0 0 2880 120" preserveAspectRatio="none"><path d="M0 70C180 100 540 30 720 70C900 100 1260 30 1440 70C1620 100 1980 30 2160 70C2340 100 2700 30 2880 70V120H0Z"/></svg>
@@ -370,7 +432,7 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
           <thead><tr><th>ID</th><th>Tài khoản</th><th>2FA</th><th>Chi tiết</th><th>Giá</th><th>Trạng thái</th><th></th></tr></thead>
           <tbody id="rows"></tbody>
         </table>
-        <div class="empty" id="empty" hidden><b>Chưa có đơn nào</b><span id="empty-sub"></span></div>
+        <div class="empty" id="empty" hidden><svg class="ew" viewBox="0 0 400 200" aria-hidden="true"><use href="#whale"/></svg><b>Chưa có đơn nào</b><span id="empty-sub"></span></div>
         <button class="ghost more" id="more" type="button" hidden>Xem thêm</button>
       </div>
     </div>
@@ -381,7 +443,7 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
   <section id="view-phones" hidden>
     <h2>Trạng thái Cloudphone</h2>
     <div class="phones" id="phones"></div>
-    <div class="empty" id="phones-empty" hidden><b>Chưa có cloudphone nào báo cáo</b><span id="phones-empty-sub"></span></div>
+    <div class="empty" id="phones-empty" hidden><svg class="ew" viewBox="0 0 400 200" aria-hidden="true"><use href="#whale"/></svg><b>Chưa có cloudphone nào báo cáo</b><span id="phones-empty-sub"></span></div>
   </section>
 </main>
  
@@ -1048,9 +1110,69 @@ $('#seg-register').addEventListener('click', () => setGateMode('register'));
 bindPw($('#g-toggle'), $('#g-pass'));
  
 /* ----- khởi động ----- */
+const whaleSvg = flip => '<svg viewBox="0 0 400 200" aria-hidden="true"><g' + (flip ? ' transform="translate(400 0) scale(-1 1)"' : '') +
+  '><use href="#w-body"/><use class="tail" href="#w-tail"/><use class="fin" href="#w-fin"/></g></svg>';
+ 
+function addWhale(layer, o) {
+  const R = o.dir === 'R';
+  const el = h('div', { class: 'whale' });
+  el.style.cssText = 'top:' + o.top + '%;' + (R ? 'left' : 'right') + ':0;width:min(' + o.w + 'px,' + o.vw + 'vw);' +
+    'animation:swim' + o.dir + ' ' + o.dur + 's linear infinite;animation-delay:-' + o.at + 's;--sp:' + (o.sp || 3.2) + 's;--bob:' + (o.bob || 8) + 's';
+  el.innerHTML = whaleSvg(R);
+  el.firstChild.style.opacity = o.op;
+  if (o.calf) {
+    const c = h('div', { class: 'calf' });
+    c.style.cssText = 'top:58%;' + (R ? 'left:12%' : 'left:52%') + ';--sp:2.2s;--bob:5.5s';
+    c.innerHTML = whaleSvg(R);
+    c.firstChild.style.opacity = Math.min(.2, o.op * 1.3);
+    el.append(c);
+  }
+  if (o.blow) {
+    for (let i = 0; i < 3; i++) {
+      const b = h('i', { class: 'blo' });
+      b.style.cssText = 'left:' + (R ? 74 : 24) + '%;top:19%;--bx:' + ((R ? 1 : -1) * (4 + i * 5)) + 'px;animation-delay:-' + (i * 1.7).toFixed(1) + 's';
+      el.append(b);
+    }
+  }
+  layer.append(el);
+}
+ 
+function spawnWhales(sea) {
+  const small = innerWidth < 700;
+  const far = $('#lay-far'), mid = $('#lay-mid'), near = $('#lay-near');
+  if (!small) {
+    addWhale(far, { top: 20, w: 170, vw: 30, op: .07, dir: 'R', dur: 150, at: 40, bob: 9 });
+    addWhale(far, { top: 74, w: 140, vw: 26, op: .06, dir: 'L', dur: 180, at: 100, bob: 10 });
+  }
+  addWhale(mid, { top: 9, w: 300, vw: 46, op: .11, dir: 'R', dur: 125, at: 20, blow: true });
+  addWhale(mid, { top: 44, w: 250, vw: 42, op: .10, dir: 'L', dur: 105, at: 60, blow: true, bob: 7 });
+  addWhale(mid, { top: 60, w: 380, vw: 62, op: .13, dir: 'L', dur: 135, at: 48, calf: true, blow: true, bob: 9 });
+  addWhale(near, { top: 28, w: 560, vw: 82, op: .14, dir: 'R', dur: 95, at: 55, sp: 4, bob: 10, blow: true });
+ 
+  const pl = $('#plank'), pn = small ? 14 : 34;
+  for (let i = 0; i < pn; i++) {
+    const p = h('i', { class: 'pl' }), s = 1.5 + Math.random() * 2.5;
+    p.style.cssText = 'left:' + (Math.random() * 100).toFixed(1) + '%;top:' + (10 + Math.random() * 85).toFixed(1) + '%;width:' + s.toFixed(1) + 'px;height:' + s.toFixed(1) +
+      'px;--dx:' + Math.round(-40 + Math.random() * 80) + 'px;animation-duration:' + (14 + Math.random() * 18).toFixed(1) + 's;animation-delay:-' + (Math.random() * 25).toFixed(1) + 's';
+    pl.append(p);
+  }
+ 
+  /* hiệu ứng parallax nhẹ theo chuột */
+  if (window.matchMedia && matchMedia('(pointer:fine)').matches) {
+    let raf = 0, tx = 0, ty = 0;
+    addEventListener('pointermove', e => {
+      tx = e.clientX / innerWidth * 2 - 1; ty = e.clientY / innerHeight * 2 - 1;
+      if (!raf) raf = requestAnimationFrame(() => {
+        raf = 0; sea.style.setProperty('--px', tx.toFixed(3)); sea.style.setProperty('--py', ty.toFixed(3));
+      });
+    }, { passive: true });
+  }
+}
+ 
 function startBackground() {
   const sea = $('#sea');
   if (reduce) return;
+  spawnWhales(sea);
   const n = innerWidth < 700 ? 7 : 14;
   for (let i = 0; i < n; i++) {
     const b = h('i', { class: 'bub' }), s = 4 + Math.random() * 14;
