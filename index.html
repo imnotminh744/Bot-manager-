@@ -243,17 +243,19 @@ pre{background:rgba(7,14,26,.7);border:1px solid var(--line-soft);border-radius:
 pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
  
 /* ===== cloudphone ===== */
-.phones{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.phones{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(270px,100%),1fr));gap:18px}
+.phone{min-width:0}
 .phone{background:var(--glass);border:1px solid var(--line);border-radius:22px;overflow:hidden;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);display:flex;flex-direction:column}
 .phone>header{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--line-soft)}
 .phone h3{font-size:15px;font-weight:600;margin-right:auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pst{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap}
 .pst::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--s-done)}
 .pst.off::before{background:var(--s-cancel)}
-.shot{display:grid;place-items:center;height:300px;background:rgba(7,14,26,.8);border:0;padding:0;width:100%;cursor:zoom-in;position:relative}
-.shot img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.shot{display:block;position:relative;overflow:hidden;height:300px;background:rgba(7,14,26,.8);border:0;padding:0;width:100%;cursor:zoom-in}
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
 .shot.off img{filter:grayscale(.8) brightness(.6)}
-.shot span{color:var(--faint);font-size:13px}
+.shot span{position:absolute;inset:0;display:grid;place-items:center;color:var(--faint);font-size:13px}
+@media (max-width:700px){.shot{height:240px}}
 .pbody{padding:14px 18px 16px;display:grid;gap:12px}
 .meter small{display:flex;justify-content:space-between;font:11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
 .meter small b{font-weight:500;color:var(--text);letter-spacing:0}
@@ -327,6 +329,57 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
 .chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);padding-bottom:10px;white-space:nowrap}
 .agent pre{white-space:pre-wrap;word-break:break-all;max-height:none}
 @media (max-width:700px){.agent .fields{grid-template-columns:1fr}.chk{padding-bottom:0}}
+ 
+/* ===== intro: bãi biển hoàng hôn ===== */
+.intro{position:fixed;inset:0;z-index:40;overflow:hidden;background:#050b15;transition:opacity .7s ease,transform .7s ease,visibility .7s}
+.intro.leaving{opacity:0;transform:scale(1.06);visibility:hidden;pointer-events:none}
+.intro>*{position:absolute}
+.b-sky{inset:0 0 48% 0;background:linear-gradient(180deg,#050b15 0%,#10294c 45%,#2f5f94 78%,#f0a874 100%)}
+.b-star{width:2px;height:2px;border-radius:50%;background:#fff;opacity:.7;animation:twinkle 3.2s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.9}}
+.b-sun{left:70%;top:52%;width:clamp(90px,14vw,150px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-62%);background:radial-gradient(circle,#fff6d6 0%,#ffcf8a 55%,#ff9e5e 100%);box-shadow:0 0 70px 30px rgba(255,170,100,.38),0 0 180px 90px rgba(255,140,90,.18);animation:sunpulse 6s ease-in-out infinite}
+@keyframes sunpulse{0%,100%{box-shadow:0 0 70px 30px rgba(255,170,100,.38),0 0 180px 90px rgba(255,140,90,.18)}50%{box-shadow:0 0 84px 38px rgba(255,170,100,.48),0 0 200px 100px rgba(255,140,90,.24)}}
+.gull{left:0;width:34px;height:14px;color:rgba(235,244,255,.85);animation:gull var(--gd,38s) linear infinite}
+.gull svg{display:block;width:100%;height:100%;transform-origin:50% 100%;animation:flapw .7s ease-in-out infinite alternate}
+@keyframes gull{from{transform:translate(-10vw,0)}50%{transform:translate(55vw,-16px)}to{transform:translate(110vw,6px)}}
+@keyframes flapw{from{transform:scaleY(1)}to{transform:scaleY(.3)}}
+.b-sea{left:0;right:0;top:52%;bottom:0;background:linear-gradient(180deg,#3d79ab 0%,#1c5688 32%,#0c3157 100%)}
+.b-refl{position:absolute;left:70%;top:0;width:clamp(110px,16vw,190px);height:22%;transform:translateX(-50%);background:repeating-linear-gradient(180deg,rgba(255,214,150,.6) 0 3px,transparent 3px 9px);-webkit-mask-image:linear-gradient(180deg,#000,transparent);mask-image:linear-gradient(180deg,#000,transparent);clip-path:polygon(30% 0,70% 0,100% 100%,0 100%);animation:shimmer 3.4s ease-in-out infinite}
+@keyframes shimmer{0%,100%{opacity:.55;transform:translateX(-50%) scaleX(.9)}50%{opacity:1;transform:translateX(-50%) scaleX(1.08)}}
+.b-ripple{left:0;top:52%;width:100%;height:12px;margin-top:-6px;animation:ripple 5s ease-in-out infinite alternate}
+@keyframes ripple{from{transform:translateX(-12px)}to{transform:translateX(12px)}}
+.intro .iw{left:0;top:53%;width:min(300px,56vw);z-index:3;animation:introSwim 20s linear infinite;animation-delay:-7s}
+@keyframes introSwim{from{transform:translateX(-110%)}to{transform:translateX(100vw)}}
+.intro .iw svg{filter:drop-shadow(0 6px 14px rgba(0,0,0,.35))}
+.intro .iw .sp{position:absolute;left:74%;top:19%;width:8px;height:74px;margin:-74px 0 0 -4px;border-radius:6px;transform-origin:50% 100%;background:linear-gradient(0deg,rgba(235,247,255,.95),rgba(235,247,255,0));opacity:0;animation:spout 6s ease-out infinite}
+@keyframes spout{0%,60%{transform:scaleY(0);opacity:0}64%{opacity:.95}78%{transform:scaleY(1);opacity:.85}100%{transform:scaleY(1.15);opacity:0}}
+.intro .iw .spd{position:absolute;left:74%;top:19%;width:5px;height:5px;margin-left:-2px;border-radius:50%;background:rgba(235,247,255,.9);opacity:0;animation:spdrop 6s ease-out infinite}
+@keyframes spdrop{0%,64%{opacity:0;transform:translate(0,-58px)}69%{opacity:.9}100%{opacity:0;transform:translate(var(--dx),26px)}}
+.b-front{left:0;right:0;top:calc(53% + clamp(48px,7vw,78px));bottom:0;z-index:4;background:linear-gradient(180deg,rgba(24,88,140,.82),rgba(8,40,74,.94));overflow:hidden}
+.b-front svg{position:absolute;left:0;top:-29px;width:200%;height:30px;fill:rgba(24,88,140,.82);animation:slide 18s linear infinite}
+.b-sand{left:0;right:0;bottom:0;width:100%;height:26%;z-index:5}
+.b-foam{left:0;right:0;bottom:0;width:100%;height:26%;z-index:6;animation:wash 7s ease-in-out infinite alternate}
+.b-foam.f2{animation-duration:9s;animation-delay:-3s;opacity:.8}
+@keyframes wash{0%{transform:translateY(-8px);opacity:.25}60%{opacity:.95}100%{transform:translateY(12px);opacity:.15}}
+.palm{left:1%;bottom:13%;width:min(190px,34vw);color:#06101e;z-index:7;transform-origin:38% 100%;animation:sway 7s ease-in-out infinite alternate}
+@keyframes sway{from{transform:rotate(-2.2deg)}to{transform:rotate(2.6deg)}}
+.intro-in{left:0;right:0;top:8%;z-index:8;text-align:center;display:grid;justify-items:center;padding:0 20px}
+.intro h1{font:600 clamp(34px,7vw,64px)/1.1 var(--sans);letter-spacing:-.01em;background:linear-gradient(90deg,#e6edf7,#9bd0ff);-webkit-background-clip:text;background-clip:text;color:transparent;animation:fadeup .9s .3s both}
+.intro .by{margin-top:6px;font:13px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:#9fb4cf;animation:fadeup .9s .6s both}
+.enter{margin-top:26px;height:52px;padding:0 36px;border:0;border-radius:99px;background:var(--accent);color:var(--accent-ink);font-weight:600;font-size:16px;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .6s,transform .6s,filter .15s}
+.intro.ready .enter{opacity:1;transform:none;pointer-events:auto;animation:glow 2.4s ease-in-out infinite}
+.enter:hover{filter:brightness(1.1)}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(59,156,255,.5)}50%{box-shadow:0 0 0 14px rgba(59,156,255,0)}}
+.intro .hint{margin-top:14px;font-size:12.5px;color:#8ea4c2;opacity:0;transition:opacity .6s .2s}
+.intro.ready .hint{opacity:1}
+ 
+/* ===== nút nhạc ===== */
+.music{position:fixed;right:18px;bottom:18px;z-index:15;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--glass);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--muted);display:grid;place-items:center;transition:color .2s,border-color .2s}
+.music:hover{color:var(--text);border-color:var(--muted)}
+.music.on{color:var(--accent);border-color:#2a5384;animation:glow 2.4s ease-in-out infinite}
+.music::after{content:"";position:absolute;width:28px;height:2px;border-radius:2px;background:currentColor;transform:rotate(-45deg)}
+.music.on::after{display:none}
+.yt{position:fixed;left:-9999px;top:0;width:200px;height:200px;overflow:hidden}
  
 /* ===== tinh chỉnh giao diện ===== */
 .top{box-shadow:0 12px 30px -22px rgba(0,0,0,.7)}
@@ -488,6 +541,48 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
     <div class="foot">Web Made By Minh</div>
   </form>
 </div>
+ 
+<div class="intro" id="intro">
+  <div class="b-sky"></div>
+  <i class="b-star" style="left:12%;top:8%"></i><i class="b-star" style="left:30%;top:18%;animation-delay:-1.2s"></i><i class="b-star" style="left:58%;top:6%;animation-delay:-2.1s"></i><i class="b-star" style="left:84%;top:14%;animation-delay:-.6s"></i><i class="b-star" style="left:92%;top:30%;animation-delay:-1.8s"></i>
+  <div class="b-sun"></div>
+  <div class="gull" style="top:20%;--gd:38s;animation-delay:-10s"><svg viewBox="0 0 34 14" aria-hidden="true"><path d="M1 12Q9 0 17 9Q25 0 33 12" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></div>
+  <div class="gull" style="top:30%;--gd:46s;width:24px;height:10px;animation-delay:-28s"><svg viewBox="0 0 34 14" aria-hidden="true"><path d="M1 12Q9 0 17 9Q25 0 33 12" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/></svg></div>
+  <div class="gull" style="top:14%;--gd:52s;width:28px;height:12px;animation-delay:-3s"><svg viewBox="0 0 34 14" aria-hidden="true"><path d="M1 12Q9 0 17 9Q25 0 33 12" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></div>
+  <div class="b-sea"><i class="b-refl"></i></div>
+  <svg class="b-ripple" viewBox="0 0 1440 40" preserveAspectRatio="none" aria-hidden="true"><path d="M0 20C120 6 240 34 360 20C480 6 600 34 720 20C840 6 960 34 1080 20C1200 6 1320 34 1440 20" fill="none" stroke="rgba(255,226,180,.35)" stroke-width="2"/></svg>
+  <div class="whale iw" id="intro-whale"></div>
+  <div class="b-front"><svg viewBox="0 0 2880 60" preserveAspectRatio="none" aria-hidden="true"><path d="M0 30C180 6 540 54 720 30C900 6 1260 54 1440 30C1620 6 1980 54 2160 30C2340 6 2700 54 2880 30V60H0Z"/></svg></div>
+  <svg class="b-sand" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden="true">
+    <defs><linearGradient id="sandg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d9b887"/><stop offset="1" stop-color="#8d6c45"/></linearGradient></defs>
+    <path fill="url(#sandg)" d="M0 62C300 22 700 72 1100 32C1250 18 1350 30 1440 42V200H0Z"/>
+  </svg>
+  <svg class="b-foam f1" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 62C300 22 700 72 1100 32C1250 18 1350 30 1440 42" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="5" stroke-linecap="round"/></svg>
+  <svg class="b-foam f2" viewBox="0 0 1440 200" preserveAspectRatio="none" aria-hidden="true"><path d="M0 62C300 22 700 72 1100 32C1250 18 1350 30 1440 42" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="3" stroke-linecap="round"/></svg>
+  <svg class="palm" viewBox="0 0 160 210" aria-hidden="true">
+    <path fill="currentColor" d="M52 210C58 156 62 112 74 70L83 72C73 114 69 156 67 210Z"/>
+    <g fill="currentColor">
+      <path transform="translate(78 70) rotate(-160)" d="M0 0C18 -22 52 -26 84 -6C52 -12 22 -8 0 0Z"/>
+      <path transform="translate(78 70) rotate(-125)" d="M0 0C18 -22 52 -26 84 -6C52 -12 22 -8 0 0Z"/>
+      <path transform="translate(78 70) rotate(-90)" d="M0 0C18 -22 52 -26 84 -6C52 -12 22 -8 0 0Z"/>
+      <path transform="translate(78 70) rotate(-52)" d="M0 0C18 -22 52 -26 84 -6C52 -12 22 -8 0 0Z"/>
+      <path transform="translate(78 70) rotate(-14)" d="M0 0C18 -22 52 -26 84 -6C52 -12 22 -8 0 0Z"/>
+      <path transform="translate(78 70) rotate(24)" d="M0 0C18 -22 52 -26 84 -6C52 -12 22 -8 0 0Z"/>
+      <path transform="translate(78 70) rotate(165)" d="M0 0C18 -22 52 -26 84 -6C52 -12 22 -8 0 0Z"/>
+    </g>
+  </svg>
+  <div class="intro-in">
+    <h1>Order Manager</h1>
+    <div class="by">Web Made By Minh</div>
+    <button class="enter" id="enter" type="button">Vào web</button>
+    <div class="hint">Có nhạc nền, bấm nút ♪ ở góc phải để tắt/bật</div>
+  </div>
+</div>
+ 
+<button class="music" id="music" type="button" aria-pressed="false" title="Bật nhạc" aria-label="Bật/tắt nhạc">
+  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 18V6l11-2v12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.5" fill="currentColor"/><circle cx="17.5" cy="16" r="2.5" fill="currentColor"/></svg>
+</button>
+<div class="yt" aria-hidden="true"><div id="yt-player"></div></div>
  
 <div class="toast" id="toast" role="status"></div>
  
@@ -1281,8 +1376,80 @@ async function startCloud() {
   });
 }
  
+/* ----- nhạc nền (YouTube IFrame Player, ẩn) ----- */
+const MUSIC_ID = 'gJAbDSse5WM';
+let yt = null, musicOn = false, ytLoading = false;
+const ytQueue = [];
+function setMusicUI(on) {
+  musicOn = on;
+  const b = $('#music');
+  b.classList.toggle('on', on);
+  b.setAttribute('aria-pressed', String(on));
+  b.title = on ? 'Tắt nhạc' : 'Bật nhạc';
+}
+function loadYT(cb) {
+  if (window.YT && window.YT.Player) return cb();
+  ytQueue.push(cb);
+  if (ytLoading) return;
+  ytLoading = true;
+  window.onYouTubeIframeAPIReady = () => ytQueue.splice(0).forEach(f => f());
+  const s = document.createElement('script');
+  s.src = 'https://www.youtube.com/iframe_api';
+  s.onerror = () => { ytLoading = false; ytQueue.length = 0; toast('Không tải được trình phát nhạc'); };
+  document.head.append(s);
+}
+function startMusic() {
+  if (yt && yt.playVideo) { yt.playVideo(); return; }
+  loadYT(() => {
+    if (yt) return;
+    yt = new YT.Player('yt-player', {
+      width: '200', height: '200', videoId: MUSIC_ID,
+      playerVars: { autoplay: 1, controls: 0, disablekb: 1, playsinline: 1, loop: 1, playlist: MUSIC_ID, rel: 0, modestbranding: 1 },
+      events: {
+        onReady(e) { e.target.setVolume(45); e.target.playVideo(); },
+        onStateChange(e) {
+          if (e.data === 1) setMusicUI(true);
+          else if (e.data === 2) setMusicUI(false);
+          else if (e.data === 0) e.target.playVideo();
+        },
+        onError() { setMusicUI(false); toast('Không phát được nhạc (video có thể bị chặn nhúng)'); }
+      }
+    });
+  });
+}
+function stopMusic() { if (yt && yt.pauseVideo) yt.pauseVideo(); setMusicUI(false); }
+$('#music').addEventListener('click', () => {
+  if (musicOn) { save('bfm_music_off', true); stopMusic(); }
+  else { save('bfm_music_off', false); startMusic(); }
+});
+ 
+/* ----- intro bãi biển ----- */
+function setupIntro() {
+  const el = $('#intro'), btn = $('#enter');
+  const w = $('#intro-whale');
+  w.style.cssText = '--sp:2.6s;--bob:5s';
+  w.innerHTML = whaleSvg(true);
+  w.append(h('i', { class: 'sp' }));
+  [-26, -8, 12, 30].forEach((dx, i) => {
+    const d = h('i', { class: 'spd' });
+    d.style.cssText = '--dx:' + dx + 'px;animation-delay:' + (i * 0.05).toFixed(2) + 's';
+    w.append(d);
+  });
+  document.body.classList.add('locked');
+  setTimeout(() => { el.classList.add('ready'); try { btn.focus({ preventScroll: true }); } catch (e) {} }, 2000);
+  btn.addEventListener('click', () => {
+    el.classList.add('leaving');
+    if (load('bfm_music_off', false) !== true) startMusic();
+    setTimeout(() => {
+      el.remove();
+      if ($('#gate').hidden) document.body.classList.remove('locked');
+    }, 800);
+  });
+}
+ 
 renderScripts();
 startBackground();
+setupIntro();
 render();
 if (location.hash === '#scripts') showTab('scripts');
 if (WANT_CLOUD) startCloud(); else startLocal();
