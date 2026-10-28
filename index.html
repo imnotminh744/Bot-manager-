@@ -320,6 +320,14 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
   .c-st{grid-column:2;grid-row:5}
   .id small{display:inline;margin-left:8px}
 }
+/* ===== lệnh cài agent ===== */
+.agent{max-width:900px;margin-bottom:22px}
+.agent .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end;padding:16px 22px;border-bottom:1px solid var(--line-soft);background:rgba(10,20,36,.55)}
+.agent .fields .field{margin:0}
+.chk{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);padding-bottom:10px;white-space:nowrap}
+.agent pre{white-space:pre-wrap;word-break:break-all;max-height:none}
+@media (max-width:700px){.agent .fields{grid-template-columns:1fr}.chk{padding-bottom:0}}
+ 
 /* ===== tinh chỉnh giao diện ===== */
 .top{box-shadow:0 12px 30px -22px rgba(0,0,0,.7)}
 .brand b{background:linear-gradient(90deg,#e6edf7,#7fc0ff);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -381,7 +389,7 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
     <nav class="tabs" role="tablist">
       <button class="tab" role="tab" id="tab-orders" aria-selected="true" data-tab="orders">Đơn hàng</button>
       <button class="tab" role="tab" id="tab-scripts" aria-selected="false" data-tab="scripts">Kho script</button>
-      <button class="tab" role="tab" id="tab-phones" aria-selected="false" data-tab="phones">Cloudphone</button>
+      <button class="tab" role="tab" id="tab-phones" aria-selected="false" data-tab="phones">Status CloudPhone</button>
     </nav>
     <div class="acct" id="acct" hidden>
       <span class="sync" id="sync" data-s="ok">Đã đồng bộ</span>
@@ -441,7 +449,17 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
   <section id="view-scripts" class="scripts" hidden></section>
  
   <section id="view-phones" hidden>
-    <h2>Trạng thái Cloudphone</h2>
+    <h2>Status CloudPhone</h2>
+    <div class="sgroup agent">
+      <header><h3>Cài tool chụp màn hình lên cloudphone<small>dán lệnh vào terminal của máy (đã root), tool tự chụp + gửi CPU/RAM mỗi 5 phút</small></h3></header>
+      <div class="fields">
+        <label class="field"><span>Tên máy (mỗi máy một tên)</span>
+          <input class="inp" id="ag-name" value="Phone 1" spellcheck="false" autocomplete="off"></label>
+        <label class="field"><span>Mật khẩu web (chỉ dùng để tạo lệnh, không lưu)</span>
+          <div class="pw"><input class="inp" id="ag-pass" type="password" placeholder="MAT_KHAU" autocomplete="new-password" spellcheck="false">
+          <button type="button" id="ag-toggle">Hiện</button></div></label>      </div>
+      <div id="agent-cmds"></div>
+    </div>
     <div class="phones" id="phones"></div>
     <div class="empty" id="phones-empty" hidden><svg class="ew" viewBox="0 0 400 200" aria-hidden="true"><use href="#whale"/></svg><b>Chưa có cloudphone nào báo cáo</b><span id="phones-empty-sub"></span></div>
   </section>
@@ -1048,13 +1066,46 @@ function renderPhones() {
           } })))));
   });
   root.replaceChildren(frag);
+  if (typeof refreshAgentCmds === 'function') refreshAgentCmds();
   const cloud = store && store.mode === 'cloud';
   $('#phones-empty').hidden = list.length > 0;
   $('#phones-empty-sub').textContent = cloud
-    ? 'Chạy cloudphone-agent.py trên cloudphone (xem README), thiết bị sẽ tự xuất hiện sau vài giây.'
+    ? 'Dán lệnh ở khung phía trên vào cloudphone, thiết bị sẽ tự xuất hiện sau vài giây.'
     : 'Tính năng này cần đăng nhập Firebase (điền firebase-config.js, xem README).';
 }
 setInterval(() => { if (!document.hidden && phones.length) renderPhones(); }, 30000);
+ 
+/* ----- lệnh cài agent (tạo sẵn để copy) ----- */
+const AGENT_URL = 'https://raw.githubusercontent.com/imnotminh744/Bot-manager-/main/cloudphone-agent.py';
+const shq = s => "'" + String(s).replace(/'/g, "'\\''") + "'";
+function agentBase() {
+  const user = store && store.name ? store.name : 'TAI_KHOAN';
+  const name = $('#ag-name').value.trim() || 'Phone 1';
+  const pass = $('#ag-pass').value || 'MAT_KHAU';
+  return {
+    install: 'curl -fsSL ' + AGENT_URL + ' -o cloudphone-agent.py && (python -c "import PIL" 2>/dev/null || pkg install -y python-pillow)',
+    run: 'python cloudphone-agent.py --local --su --name ' + shq(name) + ' --user ' + shq(user) + ' --password ' + shq(pass)
+  };
+}
+const AGENT_CMDS = [
+  ['Lệnh chạy nền cho máy đã root', b => b.install + ' && nohup ' + b.run + ' > agent.log 2>&1 &'],
+  ['Xem log đang chạy', () => 'tail -f agent.log'],
+  ['Dừng tool', () => 'pkill -f cloudphone-agent.py']
+];
+const agentViews = AGENT_CMDS.map(([label, make]) => {
+  const pre = h('pre');
+  const btn = h('button', { class: 'ghost', type: 'button', text: 'Copy', onclick() {
+    copy(make(agentBase()), 'Đã copy lệnh');
+    btn.textContent = 'Đã copy'; btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('ok'); }, 1200);
+  } });
+  $('#agent-cmds').append(h('div', { class: 'block' }, h('div', { class: 'bhead' }, h('span', { text: label }), btn), pre));
+  return () => { pre.textContent = make(agentBase()); };
+});
+function refreshAgentCmds() { agentViews.forEach(f => f()); }
+bindPw($('#ag-toggle'), $('#ag-pass'));
+['#ag-name', '#ag-pass'].forEach(s => $(s).addEventListener('input', refreshAgentCmds));
+refreshAgentCmds();
  
 /* ----- trạng thái đồng bộ ----- */
 const SYNC_TEXT = { ok: 'Đã đồng bộ', pending: 'Đang đồng bộ…', offline: 'Ngoại tuyến', error: 'Lỗi đồng bộ', local: 'Lưu trên máy này' };
