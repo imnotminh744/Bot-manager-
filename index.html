@@ -404,7 +404,7 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
 .cn{display:flex;align-items:center;justify-content:space-between;font:12px var(--mono);color:var(--muted)}
 .cn b{display:inline-grid;place-items:center;min-width:28px;height:28px;border-radius:50%;background:var(--raise);color:var(--text);font-weight:500;font-size:13px}
 .ctab.has .cn b{background:var(--accent);color:var(--accent-ink)}
-.chips{display:flex;flex-wrap:wrap;gap:5px;min-height:26px;align-content:flex-start}
+.chips{display:flex;flex-wrap:wrap;gap:5px;min-height:26px;align-content:flex-start;flex:1 1 auto}
 .chip2{display:inline-flex;align-items:center;gap:2px;max-width:100%;background:var(--raise);border:1px solid var(--line);border-radius:99px;padding:1px 3px 1px 10px;font:12px var(--mono)}
 .chip2 span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
 .chip2 button{flex:none;width:20px;height:20px;border:0;background:none;color:var(--muted);border-radius:50%;line-height:1;font-size:15px}
@@ -413,7 +413,9 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
 .chip2.hit button{color:var(--accent-ink)}
 .ctab .inp{padding:6px 10px;font:12px var(--mono);border-radius:10px}
 @media (max-width:1100px){.ctabs{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:700px){.ctabs{grid-template-columns:repeat(2,minmax(0,1fr));padding:12px;gap:10px}.csum{margin-left:0;width:100%}.ctool .search{max-width:none;flex:1 1 100%}}
+@media (max-width:700px){.ctabs{grid-template-columns:repeat(2,minmax(0,1fr));padding:12px;gap:10px}.csum{margin-left:0;width:100%}.ctool .search{max-width:none;flex:1 1 100%}.cphone h3 small{display:block;margin:3px 0 0}.cphone>header{padding:12px 14px}}
+/* điện thoại: chữ trong ô nhập >= 16px để iPhone không tự phóng to trang */
+@media (pointer:coarse){input:not([type=checkbox]):not([type=radio]),textarea,select{font-size:16px!important}}
  
 /* ===== storage account clone manager ===== */
 .stwrap{display:grid;grid-template-columns:280px minmax(0,1fr);gap:24px;align-items:start}
@@ -438,7 +440,18 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
 .sttool{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line-soft)}
 .sttool .search{flex:1 1 200px;min-width:150px}
 .ghost.danger:hover:not(:disabled){border-color:var(--s-cancel);color:var(--s-cancel)}
-.strow{display:grid;grid-template-columns:22px 48px minmax(120px,1fr) minmax(0,1.4fr) auto;gap:10px;align-items:center;padding:9px 20px;border-bottom:1px solid var(--line-soft)}
+.stfields{display:grid;grid-template-columns:1.1fr 1fr 1fr auto;gap:12px;align-items:end}
+.stfields .field{margin:0}
+.stfields .btn{width:auto;height:44px;padding:0 24px}
+.stbulk summary{cursor:pointer;font-size:13px;color:var(--muted);width:max-content}
+.stbulk summary:hover{color:var(--text)}
+.stbulk[open] summary{margin-bottom:10px}
+.stbulk textarea{width:100%}
+.strow{display:grid;grid-template-columns:22px 44px minmax(0,1fr) minmax(0,1.2fr) minmax(0,1fr) 124px;gap:10px;align-items:center;padding:9px 20px;border-bottom:1px solid var(--line-soft)}
+.sno{font-size:13px;overflow-wrap:anywhere;cursor:pointer;min-width:0}
+.sno:hover{color:var(--accent)}
+.sno.none{color:var(--faint);font-size:12px}
+.hall{display:none}
 .strow:hover{background:#112038}
 .sthead{padding-top:10px;padding-bottom:10px;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .sthead:hover{background:none}
@@ -452,11 +465,18 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
 .mini:hover{color:var(--accent);background:var(--raise)}
 .stmain .more{margin:12px auto}
 @media (max-width:900px){.stwrap{grid-template-columns:1fr}.stside{position:static}}
+@media (max-width:900px){.stfields{grid-template-columns:1fr 1fr}.stfields .btn{grid-column:1/-1}}
 @media (max-width:700px){
-  .strow{grid-template-columns:22px minmax(0,1fr) auto;padding:10px 14px}
+  .stfields{grid-template-columns:1fr}
+  .strow{grid-template-columns:22px minmax(0,1fr) auto;gap:4px 10px;padding:10px 14px}
   .strow>.sn{display:none}
-  .strow>.sp{grid-column:2/-1}
-  .sthead>:nth-child(n+3){display:none}
+  .strow>input[type=checkbox]{grid-column:1;grid-row:1}
+  .strow>.su{grid-column:2;grid-row:1}
+  .strow>.sa{grid-column:3;grid-row:1}
+  .strow>.sp{grid-column:2/-1;grid-row:2}
+  .strow>.sno{grid-column:2/-1;grid-row:3}
+  .sthead>span{display:none}
+  .sthead>.hall{display:block;grid-column:2/-1;font-size:11px}
   .sth,.stadd,.sttool{padding-left:14px;padding-right:14px}
 }
 @media (min-width:701px) and (max-width:1400px){.tab{padding:0 13px}.brand span{display:none}}
@@ -642,17 +662,26 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
             <button class="ghost" id="st-rename" type="button">Đổi tên</button>
             <button class="del" id="st-del" type="button" title="Xóa kho này" aria-label="Xóa kho">×</button>
           </header>
-          <div class="stadd">
-            <textarea class="inp" id="st-text" spellcheck="false" placeholder="Dán nhiều acc vào đây, mỗi dòng 1 acc. VD:&#10;user1:matkhau1&#10;user2:matkhau2&#10;user3|matkhau3|ghi chú"></textarea>
-            <div class="stadd-row"><button class="btn" id="st-addbtn" type="button">Thêm vào kho</button><span class="hint2" id="st-hint"></span></div>
-          </div>
+          <form class="stadd" id="st-add" autocomplete="off">
+            <div class="stfields">
+              <label class="field"><span>Ghi chú</span><input class="inp" id="st-note" placeholder="VD: clone số 1, lv 700…" maxlength="200"></label>
+              <label class="field"><span>Tài khoản <em>*</em></span><input class="inp" id="st-user" placeholder="username" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="120"></label>
+              <label class="field"><span>Mật khẩu</span><div class="pw"><input class="inp" id="st-pass" type="password" placeholder="••••••••" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="300"><button type="button" id="st-pwt">Hiện</button></div></label>
+              <button class="btn" type="submit">+ Thêm</button>
+            </div>
+            <details class="stbulk">
+              <summary>Dán nhiều acc cùng lúc</summary>
+              <textarea class="inp" id="st-text" spellcheck="false" placeholder="Mỗi dòng 1 acc, dùng 1 trong các kiểu:&#10;tài khoản:mật khẩu&#10;tài khoản|mật khẩu|ghi chú&#10;hoặc dán từ Excel 3 cột: tài khoản, mật khẩu, ghi chú"></textarea>
+              <div class="stadd-row"><button class="ghost solid" id="st-addbtn" type="button">Thêm tất cả</button><span class="hint2" id="st-hint"></span></div>
+            </details>
+          </form>
           <div class="sttool">
             <input class="inp search" id="st-q" type="search" placeholder="Tìm acc trong kho…" aria-label="Tìm acc trong kho">
             <button class="ghost" id="st-copyall" type="button">Copy tất cả</button>
             <button class="ghost" id="st-export" type="button">Tải .txt</button>
             <button class="ghost danger" id="st-delsel" type="button" disabled>Xóa đã chọn</button>
           </div>
-          <div class="strow sthead"><input type="checkbox" id="st-all" aria-label="Chọn tất cả"><span>#</span><span>Tài khoản</span><span>Mật khẩu / ghi chú</span><span></span></div>
+          <div class="strow sthead"><input type="checkbox" id="st-all" aria-label="Chọn tất cả"><span>#</span><span>Ghi chú</span><span>Tài khoản</span><span>Mật khẩu</span><span></span><span class="hall">Chọn tất cả</span></div>
           <div id="st-rows"></div>
           <div class="empty" id="st-rows-empty" hidden><b>Kho đang trống</b><span>Dán danh sách acc vào ô phía trên rồi bấm "Thêm vào kho".</span></div>
           <button class="ghost more" id="st-more" type="button" hidden>Xem thêm</button>
@@ -1527,7 +1556,27 @@ function stLines(s) {
   stCache.set(s.id, { data: s.data || '', lines });
   return lines;
 }
-const parseAcc = line => { const m = line.match(/^([^:|\t]+)[:|\t]([\s\S]*)$/); return m ? { u: m[1].trim(), p: m[2] } : { u: line.trim(), p: '' }; };
+/* mỗi acc lưu 1 dòng: tài khoản \t mật khẩu \t ghi chú (dòng cũ kiểu user:pass vẫn đọc được) */
+const parseAcc = line => {
+  if (line.includes('\t')) { const parts = line.split('\t'); return { u: (parts[0] || '').trim(), p: parts[1] || '', n: parts.slice(2).join(' ') }; }
+  const m = line.match(/^([^:|]+)[:|]([\s\S]*)$/);
+  return m ? { u: m[1].trim(), p: m[2], n: '' } : { u: line.trim(), p: '', n: '' };
+};
+const clean = t => String(t || '').replace(/[\t\r\n]+/g, ' ').trim();
+const packAcc = (u, p, n) => [clean(u), clean(p), clean(n)].join('\t').replace(/\t+$/, '');
+const accText = l => { const a = parseAcc(l); return a.p ? a.u + ':' + a.p : a.u; };
+function bulkLine(raw) {
+  const l = raw.trim(); if (!l) return null;
+  if (l.includes('\t')) { const c = l.split('\t'); return c[0].trim() ? packAcc(c[0], c[1], c.slice(2).join(' ')) : null; }
+  const m = l.match(/^([^:|]+)([:|])([\s\S]*)$/);
+  if (m) {
+    let p = m[3], n = '';
+    if (m[2] === '|' && p.includes('|')) { const i = p.indexOf('|'); n = p.slice(i + 1); p = p.slice(0, i); }
+    return m[1].trim() ? packAcc(m[1], p, n) : null;
+  }
+  const w = l.split(/\s+/);
+  return packAcc(w[0], w[1] || '', w.slice(2).join(' '));
+}
 const curStorage = () => storages.find(s => s.id === stSel) || null;
  
 function stWrite(s, lines) {
@@ -1539,13 +1588,23 @@ function stAdd(s, text) {
   const lines = stLines(s).slice();
   const seen = new Set(lines.map(l => parseAcc(l).u.toLowerCase()));
   let added = 0, dup = 0;
-  text.split(/\r?\n/).map(l => l.trim()).filter(Boolean).forEach(l => {
+  text.split(/\r?\n/).forEach(raw => {
+    const l = bulkLine(raw); if (!l) return;
     const k = parseAcc(l).u.toLowerCase();
     if (seen.has(k)) dup++; else { seen.add(k); lines.push(l); added++; }
   });
   if (!added) { toast(dup ? 'Cả ' + dup + ' acc đã có trong kho' : 'Chưa có acc nào để thêm'); return false; }
   if (!stWrite(s, lines)) return false;
   toast('Đã thêm ' + fmt.format(added) + ' acc' + (dup ? ', bỏ qua ' + dup + ' acc trùng' : ''));
+  return true;
+}
+function stAddOne(s, u, p, n) {
+  u = clean(u);
+  if (!u) { toast('Nhập tài khoản trước'); return false; }
+  const lines = stLines(s);
+  if (lines.some(l => parseAcc(l).u.toLowerCase() === u.toLowerCase())) { toast(u + ' đã có trong kho này'); return false; }
+  if (!stWrite(s, lines.concat(packAcc(u, p, n)))) return false;
+  toast('Đã thêm ' + u);
   return true;
 }
 function updateStSel() {
@@ -1585,17 +1644,25 @@ function renderStorage() {
   shown.forEach(([l, i]) => {
     const a = parseAcc(l);
     let vis = false;
-    const pw = h('span', { class: 'sp', title: 'Bấm để hiện/ẩn', text: a.p ? '••••••••' : '—',
+    const pw = h('span', { class: 'sp', title: 'Bấm để hiện/ẩn mật khẩu', text: a.p ? '••••••••' : '—',
       onclick() { if (!a.p) return; vis = !vis; pw.textContent = vis ? a.p : '••••••••'; } });
+    const note = h('span', { class: 'sno' + (a.n ? '' : ' none'), title: 'Bấm để sửa ghi chú', text: a.n || '+ ghi chú',
+      onclick() {
+        const v = prompt('Ghi chú cho ' + a.u + ':', a.n);
+        if (v === null) return;
+        stChecked.delete(l);
+        stWrite(cur, lines.map((x, j) => j === i ? packAcc(a.u, a.p, v) : x));
+      } });
     const cb = h('input', { type: 'checkbox', 'aria-label': 'Chọn ' + a.u, onchange(ev) { ev.target.checked ? stChecked.add(l) : stChecked.delete(l); updateStSel(); } });
     if (stChecked.has(l)) cb.checked = true;
     frag.append(h('div', { class: 'strow' }, cb,
       h('span', { class: 'sn', text: String(i + 1) }),
+      note,
       h('span', { class: 'su', title: 'Bấm để copy tài khoản', text: a.u, onclick() { copy(a.u, 'Đã copy tài khoản'); } }),
       pw,
       h('div', { class: 'sa' },
-        a.p ? h('button', { class: 'mini', type: 'button', text: 'mk', title: 'Copy mật khẩu / thông tin', onclick() { copy(a.p, 'Đã copy mật khẩu'); } }) : null,
-        h('button', { class: 'mini', type: 'button', text: 'copy', title: 'Copy cả dòng', onclick() { copy(l, 'Đã copy acc'); } }),
+        a.p ? h('button', { class: 'mini', type: 'button', text: 'mk', title: 'Copy mật khẩu', onclick() { copy(a.p, 'Đã copy mật khẩu'); } }) : null,
+        h('button', { class: 'mini', type: 'button', text: 'copy', title: 'Copy tài khoản:mật khẩu', onclick() { copy(accText(l), 'Đã copy acc'); } }),
         h('button', { class: 'del', type: 'button', title: 'Xóa acc', 'aria-label': 'Xóa acc', text: '×', onclick() {
           stChecked.delete(l); stWrite(cur, lines.filter((_, j) => j !== i));
         } }))));
@@ -1621,6 +1688,15 @@ $('#st-form').addEventListener('submit', e => {
   renderStorage();
   setTimeout(() => { try { $('#st-text').focus({ preventScroll: true }); } catch (e) {} }, 50);
 });
+bindPw($('#st-pwt'), $('#st-pass'));
+$('#st-add').addEventListener('submit', e => {
+  e.preventDefault();
+  const cur = curStorage(); if (!cur) return;
+  if (stAddOne(cur, $('#st-user').value, $('#st-pass').value, $('#st-note').value)) {
+    $('#st-user').value = ''; $('#st-pass').value = '';
+    try { $('#st-user').focus(); } catch (err) {}
+  }
+});
 $('#st-text').addEventListener('input', e => {
   const n = e.target.value.split(/\r?\n/).filter(l => l.trim()).length;
   $('#st-hint').textContent = n ? fmt.format(n) + ' dòng' : '';
@@ -1643,13 +1719,13 @@ $('#st-delsel').addEventListener('click', () => {
 });
 $('#st-copyall').addEventListener('click', () => {
   if (!stView.length) { toast('Không có acc để copy'); return; }
-  copy(stView.map(([l]) => l).join('\n'), 'Đã copy ' + fmt.format(stView.length) + ' acc');
+  copy(stView.map(([l]) => accText(l)).join('\n'), 'Đã copy ' + fmt.format(stView.length) + ' acc');
 });
 $('#st-export').addEventListener('click', () => {
   const cur = curStorage(); if (!cur) return;
   const lines = stLines(cur);
   if (!lines.length) { toast('Kho đang trống'); return; }
-  const url = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' }));
+  const url = URL.createObjectURL(new Blob([lines.map(accText).join('\n')], { type: 'text/plain;charset=utf-8' }));
   const a = h('a', { href: url, download: (cur.name || 'kho-clone').replace(/[\\/:*?"<>|]+/g, '_') + '.txt' });
   document.body.append(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 1500);
