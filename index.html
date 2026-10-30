@@ -299,8 +299,9 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
   main.wrap{padding-top:20px}
   .bar{flex-wrap:wrap;height:auto;padding-top:12px;padding-bottom:10px;gap:8px 12px}
   .brand span{display:none}
-  .tabs{order:3;width:100%}
-  .tab{flex:1}
+  .tabs{order:3;width:100%;overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:1 0 auto;white-space:nowrap;padding:0 14px}
   .stats .stat{padding:14px 16px}
   /* tắt blur trên điện thoại cho nhẹ máy */
   .form,.tbl,.sgroup,.stat,.top{-webkit-backdrop-filter:none;backdrop-filter:none}
@@ -414,6 +415,52 @@ pre .c{color:#5d7392}pre .s{color:#8fe0c0}pre .k{color:#6cb4ff}
 @media (max-width:1100px){.ctabs{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:700px){.ctabs{grid-template-columns:repeat(2,minmax(0,1fr));padding:12px;gap:10px}.csum{margin-left:0;width:100%}.ctool .search{max-width:none;flex:1 1 100%}}
  
+/* ===== storage account clone manager ===== */
+.stwrap{display:grid;grid-template-columns:280px minmax(0,1fr);gap:24px;align-items:start}
+.stside{display:grid;gap:12px;position:sticky;top:84px}
+.stnew{display:flex;gap:8px}
+.stnew .inp{flex:1;min-width:0;border-radius:99px;padding:8px 16px}
+.stlist{display:grid;gap:8px}
+.stitem{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;text-align:left;padding:11px 16px;background:var(--glass);border:1px solid var(--line);border-radius:16px;transition:border-color .15s,background .15s}
+.stitem:hover{border-color:var(--muted)}
+.stitem[aria-pressed="true"]{border-color:var(--accent);background:rgba(59,156,255,.1)}
+.stitem span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.stitem b{flex:none;font:500 12px var(--mono);color:var(--muted)}
+.stpanel{background:var(--glass);border:1px solid var(--line);border-radius:22px;overflow:hidden;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.sth{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--line-soft)}
+.sth h3{font-size:17px;font-weight:600;margin-right:auto;min-width:0;overflow-wrap:anywhere}
+.sth small{display:block;font:12px var(--mono);color:var(--muted);font-weight:400;margin-top:2px}
+.stadd{display:grid;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line-soft)}
+.stadd textarea{min-height:104px;font:12.5px/1.6 var(--mono);white-space:pre;overflow:auto}
+.stadd-row{display:flex;align-items:center;gap:12px}
+.stadd-row .btn{width:auto;padding:10px 22px}
+.hint2{font:12px var(--mono);color:var(--muted)}
+.sttool{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--line-soft)}
+.sttool .search{flex:1 1 200px;min-width:150px}
+.ghost.danger:hover:not(:disabled){border-color:var(--s-cancel);color:var(--s-cancel)}
+.strow{display:grid;grid-template-columns:22px 48px minmax(120px,1fr) minmax(0,1.4fr) auto;gap:10px;align-items:center;padding:9px 20px;border-bottom:1px solid var(--line-soft)}
+.strow:hover{background:#112038}
+.sthead{padding-top:10px;padding-bottom:10px;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.sthead:hover{background:none}
+.strow input[type=checkbox]{accent-color:var(--accent);width:16px;height:16px;margin:0}
+.sn{font:12px var(--mono);color:var(--muted)}
+.su{font:13px var(--mono);overflow-wrap:anywhere;cursor:pointer}
+.su:hover{color:var(--accent)}
+.sp{font:13px var(--mono);color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;min-width:0}
+.sa{display:flex;align-items:center;gap:2px}
+.mini{background:none;border:0;color:var(--muted);font:11px var(--mono);padding:2px 8px;border-radius:99px;transition:color .15s,background .15s}
+.mini:hover{color:var(--accent);background:var(--raise)}
+.stmain .more{margin:12px auto}
+@media (max-width:900px){.stwrap{grid-template-columns:1fr}.stside{position:static}}
+@media (max-width:700px){
+  .strow{grid-template-columns:22px minmax(0,1fr) auto;padding:10px 14px}
+  .strow>.sn{display:none}
+  .strow>.sp{grid-column:2/-1}
+  .sthead>:nth-child(n+3){display:none}
+  .sth,.stadd,.sttool{padding-left:14px;padding-right:14px}
+}
+@media (min-width:701px) and (max-width:1400px){.tab{padding:0 13px}.brand span{display:none}}
+ 
 /* ===== đàn cá voi sau intro ===== */
 .herd{position:fixed;inset:0;z-index:36;pointer-events:none;overflow:hidden;opacity:1;transition:opacity .6s ease}
 .herd.out{opacity:0}
@@ -492,6 +539,7 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
       <button class="tab" role="tab" id="tab-scripts" aria-selected="false" data-tab="scripts">Kho script</button>
       <button class="tab" role="tab" id="tab-phones" aria-selected="false" data-tab="phones">Status CloudPhone</button>
       <button class="tab" role="tab" id="tab-clones" aria-selected="false" data-tab="clones">Clone Tab Manager</button>
+      <button class="tab" role="tab" id="tab-storage" aria-selected="false" data-tab="storage">Storage Clone</button>
     </nav>
     <div class="acct" id="acct" hidden>
       <span class="sync" id="sync" data-s="ok">Đã đồng bộ</span>
@@ -576,6 +624,42 @@ tbody tr:hover td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
     <div class="clones" id="clones"></div>
     <div class="empty" id="clones-empty" hidden><svg class="ew" viewBox="0 0 400 200" aria-hidden="true"><use href="#whale"/></svg><b>Chưa có phone nào</b><span>Bấm "+ Tạo Phone" để tạo Phone 1, Phone 2, Phone 3… Mỗi phone có 10 ô tab để ghi acc Roblox.</span></div>
     <datalist id="acc-list"></datalist>
+  </section>
+  <section id="view-storage" hidden>
+    <h2>Storage Account Clone Manager</h2>
+    <div class="stwrap">
+      <aside class="stside">
+        <form class="stnew" id="st-form" autocomplete="off">
+          <input class="inp" id="st-name" placeholder="Tên kho clone mới…" maxlength="60" aria-label="Tên kho clone mới">
+          <button class="ghost solid" type="submit">+ Tạo kho</button>
+        </form>
+        <div class="stlist" id="st-list"></div>
+      </aside>
+      <div class="stmain" id="st-main" hidden>
+        <div class="stpanel">
+          <header class="sth">
+            <h3><span id="st-title"></span><small id="st-meta"></small></h3>
+            <button class="ghost" id="st-rename" type="button">Đổi tên</button>
+            <button class="del" id="st-del" type="button" title="Xóa kho này" aria-label="Xóa kho">×</button>
+          </header>
+          <div class="stadd">
+            <textarea class="inp" id="st-text" spellcheck="false" placeholder="Dán nhiều acc vào đây, mỗi dòng 1 acc. VD:&#10;user1:matkhau1&#10;user2:matkhau2&#10;user3|matkhau3|ghi chú"></textarea>
+            <div class="stadd-row"><button class="btn" id="st-addbtn" type="button">Thêm vào kho</button><span class="hint2" id="st-hint"></span></div>
+          </div>
+          <div class="sttool">
+            <input class="inp search" id="st-q" type="search" placeholder="Tìm acc trong kho…" aria-label="Tìm acc trong kho">
+            <button class="ghost" id="st-copyall" type="button">Copy tất cả</button>
+            <button class="ghost" id="st-export" type="button">Tải .txt</button>
+            <button class="ghost danger" id="st-delsel" type="button" disabled>Xóa đã chọn</button>
+          </div>
+          <div class="strow sthead"><input type="checkbox" id="st-all" aria-label="Chọn tất cả"><span>#</span><span>Tài khoản</span><span>Mật khẩu / ghi chú</span><span></span></div>
+          <div id="st-rows"></div>
+          <div class="empty" id="st-rows-empty" hidden><b>Kho đang trống</b><span>Dán danh sách acc vào ô phía trên rồi bấm "Thêm vào kho".</span></div>
+          <button class="ghost more" id="st-more" type="button" hidden>Xem thêm</button>
+        </div>
+      </div>
+    </div>
+    <div class="empty" id="st-empty" hidden><svg class="ew" viewBox="0 0 400 200" aria-hidden="true"><use href="#whale"/></svg><b>Chưa có kho clone nào</b><span>Nhập tên kho ở trên rồi bấm "+ Tạo kho", sau đó dán acc vào kho đó. Tạo được nhiều kho.</span></div>
   </section>
 </main>
  
@@ -741,6 +825,9 @@ function createLocalStore() {
   let cl = load('bfm_clones_v1', []);
   const emitCl = () => cb.clones && cb.clones(cl);
   const persistCl = () => { save('bfm_clones_v1', cl); emitCl(); };
+  let st = load('bfm_storage_v1', []);
+  const emitSt = () => cb.storages && cb.storages(st);
+  const persistSt = () => { save('bfm_storage_v1', st); emitSt(); };
   const emit = () => cb.orders && cb.orders(sortOrders(list));
   const persist = () => { save('bfm_orders_v2', list); emit(); };
   return {
@@ -750,8 +837,13 @@ function createLocalStore() {
     addClone() { const no = cl.reduce((m, c) => Math.max(m, c.no || 0), 0) + 1; cl.push({ id: 'c' + Date.now(), no, name: 'Phone ' + no, tabs: {} }); persistCl(); },
     renameClone(id, name) { const c = cl.find(x => x.id === id); if (c) { c.name = name; persistCl(); } },
     removeClone(id) { cl = cl.filter(x => x.id !== id); persistCl(); },
+    onStorages(f) { cb.storages = f; },
+    addStorage(name) { const no = st.reduce((m, x) => Math.max(m, x.no || 0), 0) + 1; const id = 's' + Date.now(); st.push({ id, no, name, data: '', n: 0 }); persistSt(); return id; },
+    renameStorage(id, name) { const x = st.find(v => v.id === id); if (x) { x.name = name; persistSt(); } },
+    removeStorage(id) { st = st.filter(v => v.id !== id); persistSt(); },
+    setStorage(id, lines) { const x = st.find(v => v.id === id); if (x) { x.data = lines.join('\n'); x.n = lines.length; persistSt(); } },
     setTab(id, slot, accs) { const c = cl.find(x => x.id === id); if (c) { c.tabs = c.tabs || {}; c.tabs['t' + slot] = accs; persistCl(); } },
-    start() { emit(); emitCl(); cb.keys && cb.keys(keys); },
+    start() { emit(); emitCl(); emitSt(); cb.keys && cb.keys(keys); },
     stop() {},
     add(data) {
       const no = list.reduce((m, o) => Math.max(m, o.no || 0), 100) + 1;
@@ -791,6 +883,8 @@ async function createCloud() {
     const cb = {}; const unsubs = [];
     const ccol = F.collection(db, 'users', uid, 'clones');
     let cl = [];
+    const scol = F.collection(db, 'users', uid, 'storages');
+    let stl = [];
     const fail = e => toast('Không lưu được: ' + (e.code || e.message));
     let list = []; let first = true; let pendingKey = {}; let keyTimer;
     const sync = s => cb.sync && cb.sync(s);
@@ -800,12 +894,21 @@ async function createCloud() {
       addClone() { const no = cl.reduce((m, c) => Math.max(m, c.no || 0), 0) + 1; F.setDoc(F.doc(ccol), { name: 'Phone ' + no, no, at: Date.now(), tabs: {} }).catch(fail); },
       renameClone(id, name) { F.updateDoc(F.doc(ccol, id), { name }).catch(fail); },
       removeClone(id) { F.deleteDoc(F.doc(ccol, id)).catch(fail); },
+      onStorages(f) { cb.storages = f; },
+      addStorage(name) { const no = stl.reduce((m, x) => Math.max(m, x.no || 0), 0) + 1; const ref = F.doc(scol); F.setDoc(ref, { name, no, at: Date.now(), data: '', n: 0 }).catch(fail); return ref.id; },
+      renameStorage(id, name) { F.updateDoc(F.doc(scol, id), { name }).catch(fail); },
+      removeStorage(id) { F.deleteDoc(F.doc(scol, id)).catch(fail); },
+      setStorage(id, lines) { F.updateDoc(F.doc(scol, id), { data: lines.join('\n'), n: lines.length }).catch(fail); },
       setTab(id, slot, accs) { F.updateDoc(F.doc(ccol, id), { ['tabs.t' + slot]: accs }).catch(fail); },
       removePhone(id) { F.deleteDoc(F.doc(db, 'users', uid, 'phones', id)).catch(e => toast('Không xóa được: ' + (e.code || e.message))); },
       start() {
         unsubs.push(F.onSnapshot(ccol, snap => {
           cl = snap.docs.map(d => ({ ...d.data(), id: d.id }));
           cb.clones && cb.clones(cl);
+        }, () => {}));
+        unsubs.push(F.onSnapshot(scol, snap => {
+          stl = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+          cb.storages && cb.storages(stl);
         }, () => {}));
         unsubs.push(F.onSnapshot(F.collection(db, 'users', uid, 'phones'), snap => {
           cb.phones && cb.phones(snap.docs.map(d => ({ ...d.data(), id: d.id })));
@@ -888,7 +991,7 @@ let legacy = [];
  
 /* ----- tab ----- */
 function showTab(name) {
-  ['orders', 'scripts', 'phones', 'clones'].forEach(n => {
+  ['orders', 'scripts', 'phones', 'clones', 'storage'].forEach(n => {
     $('#view-' + n).hidden = n !== name;
     $('#tab-' + n).setAttribute('aria-selected', String(n === name));
   });
@@ -1409,6 +1512,158 @@ $('#cl-add').addEventListener('click', () => { if (store) store.addClone(); });
 let clTimer;
 $('#cl-q').addEventListener('input', e => { clearTimeout(clTimer); clTimer = setTimeout(() => { clQuery = e.target.value; renderClones(); }, 120); });
  
+/* ----- storage account clone manager ----- */
+const ST_MAX = 900000; /* Firestore giới hạn ~1 MiB mỗi kho */
+let storages = [];
+let stSel = load('bfm_st_sel', null);
+let stPending = null, stQuery = '', stLimit = 100, stView = [];
+const stChecked = new Set();
+const stCache = new Map();
+const byteLen = t => new TextEncoder().encode(t).length;
+function stLines(s) {
+  const c = stCache.get(s.id);
+  if (c && c.data === (s.data || '')) return c.lines;
+  const lines = s.data ? s.data.split('\n') : [];
+  stCache.set(s.id, { data: s.data || '', lines });
+  return lines;
+}
+const parseAcc = line => { const m = line.match(/^([^:|\t]+)[:|\t]([\s\S]*)$/); return m ? { u: m[1].trim(), p: m[2] } : { u: line.trim(), p: '' }; };
+const curStorage = () => storages.find(s => s.id === stSel) || null;
+ 
+function stWrite(s, lines) {
+  if (byteLen(lines.join('\n')) > ST_MAX) { toast('Kho đã gần đầy (giới hạn khoảng 900 KB), hãy tạo kho mới'); return false; }
+  store.setStorage(s.id, lines);
+  return true;
+}
+function stAdd(s, text) {
+  const lines = stLines(s).slice();
+  const seen = new Set(lines.map(l => parseAcc(l).u.toLowerCase()));
+  let added = 0, dup = 0;
+  text.split(/\r?\n/).map(l => l.trim()).filter(Boolean).forEach(l => {
+    const k = parseAcc(l).u.toLowerCase();
+    if (seen.has(k)) dup++; else { seen.add(k); lines.push(l); added++; }
+  });
+  if (!added) { toast(dup ? 'Cả ' + dup + ' acc đã có trong kho' : 'Chưa có acc nào để thêm'); return false; }
+  if (!stWrite(s, lines)) return false;
+  toast('Đã thêm ' + fmt.format(added) + ' acc' + (dup ? ', bỏ qua ' + dup + ' acc trùng' : ''));
+  return true;
+}
+function updateStSel() {
+  const n = stChecked.size;
+  const b = $('#st-delsel');
+  b.disabled = n === 0;
+  b.textContent = n ? 'Xóa đã chọn (' + fmt.format(n) + ')' : 'Xóa đã chọn';
+  const all = $('#st-all');
+  all.checked = stView.length > 0 && stView.every(([l]) => stChecked.has(l));
+}
+function renderStorage() {
+  if (stSel && stSel === stPending && !storages.some(s => s.id === stSel)) { /* đang chờ kho mới tạo xuất hiện */ }
+  else {
+    if (stPending && storages.some(s => s.id === stPending)) stPending = null;
+    if (!storages.some(s => s.id === stSel)) stSel = null;
+  }
+  const list = storages.slice().sort((a, b) => ((a.no || 0) - (b.no || 0)) || String(a.name).localeCompare(String(b.name), 'vi', { numeric: true }));
+  if (!stSel && list.length) stSel = list[0].id;
+  const cur = curStorage();
+ 
+  $('#st-list').replaceChildren(...list.map(s => h('button', { class: 'stitem', type: 'button', 'aria-pressed': String(s.id === stSel),
+    onclick() { stSel = s.id; save('bfm_st_sel', stSel); stQuery = ''; $('#st-q').value = ''; stLimit = 100; stChecked.clear(); renderStorage(); } },
+    h('span', { text: s.name || 'Kho', title: s.name || '' }), h('b', { text: fmt.format(stLines(s).length) }))));
+  $('#st-empty').hidden = list.length > 0;
+  $('#st-main').hidden = !cur;
+  if (!cur) return;
+ 
+  const lines = stLines(cur);
+  $('#st-title').textContent = cur.name || 'Kho';
+  $('#st-meta').textContent = fmt.format(lines.length) + ' acc · ' + Math.round(byteLen(cur.data || '') / 1024) + ' KB / ' + Math.round(ST_MAX / 1000) + ' KB';
+  const q = stQuery.trim().toLowerCase();
+  const items = [];
+  lines.forEach((l, i) => { if (!q || l.toLowerCase().includes(q)) items.push([l, i]); });
+  stView = items;
+  const shown = items.slice(0, stLimit);
+  const frag = document.createDocumentFragment();
+  shown.forEach(([l, i]) => {
+    const a = parseAcc(l);
+    let vis = false;
+    const pw = h('span', { class: 'sp', title: 'Bấm để hiện/ẩn', text: a.p ? '••••••••' : '—',
+      onclick() { if (!a.p) return; vis = !vis; pw.textContent = vis ? a.p : '••••••••'; } });
+    const cb = h('input', { type: 'checkbox', 'aria-label': 'Chọn ' + a.u, onchange(ev) { ev.target.checked ? stChecked.add(l) : stChecked.delete(l); updateStSel(); } });
+    if (stChecked.has(l)) cb.checked = true;
+    frag.append(h('div', { class: 'strow' }, cb,
+      h('span', { class: 'sn', text: String(i + 1) }),
+      h('span', { class: 'su', title: 'Bấm để copy tài khoản', text: a.u, onclick() { copy(a.u, 'Đã copy tài khoản'); } }),
+      pw,
+      h('div', { class: 'sa' },
+        a.p ? h('button', { class: 'mini', type: 'button', text: 'mk', title: 'Copy mật khẩu / thông tin', onclick() { copy(a.p, 'Đã copy mật khẩu'); } }) : null,
+        h('button', { class: 'mini', type: 'button', text: 'copy', title: 'Copy cả dòng', onclick() { copy(l, 'Đã copy acc'); } }),
+        h('button', { class: 'del', type: 'button', title: 'Xóa acc', 'aria-label': 'Xóa acc', text: '×', onclick() {
+          stChecked.delete(l); stWrite(cur, lines.filter((_, j) => j !== i));
+        } }))));
+  });
+  $('#st-rows').replaceChildren(frag);
+  $('#st-rows-empty').hidden = items.length > 0;
+  $('#st-rows-empty b').textContent = lines.length ? 'Không có acc nào khớp' : 'Kho đang trống';
+  const more = $('#st-more');
+  more.hidden = items.length <= stLimit;
+  more.textContent = 'Xem thêm (' + fmt.format(items.length - stLimit) + ' acc)';
+  updateStSel();
+}
+$('#st-form').addEventListener('submit', e => {
+  e.preventDefault();
+  if (!store) return;
+  const name = $('#st-name').value.trim();
+  if (!name) { toast('Nhập tên kho trước'); return; }
+  const id = store.addStorage(name);
+  stPending = id; stSel = id; save('bfm_st_sel', id);
+  stQuery = ''; $('#st-q').value = ''; stLimit = 100; stChecked.clear();
+  $('#st-name').value = '';
+  toast('Đã tạo kho "' + name + '"');
+  renderStorage();
+  setTimeout(() => { try { $('#st-text').focus({ preventScroll: true }); } catch (e) {} }, 50);
+});
+$('#st-text').addEventListener('input', e => {
+  const n = e.target.value.split(/\r?\n/).filter(l => l.trim()).length;
+  $('#st-hint').textContent = n ? fmt.format(n) + ' dòng' : '';
+});
+$('#st-addbtn').addEventListener('click', () => {
+  const cur = curStorage(); if (!cur) return;
+  if (stAdd(cur, $('#st-text').value)) { $('#st-text').value = ''; $('#st-hint').textContent = ''; }
+});
+let stTimer;
+$('#st-q').addEventListener('input', e => { clearTimeout(stTimer); stTimer = setTimeout(() => { stQuery = e.target.value; stLimit = 100; renderStorage(); }, 150); });
+$('#st-more').addEventListener('click', () => { stLimit += 200; renderStorage(); });
+$('#st-all').addEventListener('change', e => {
+  stView.forEach(([l]) => { e.target.checked ? stChecked.add(l) : stChecked.delete(l); });
+  renderStorage();
+});
+$('#st-delsel').addEventListener('click', () => {
+  const cur = curStorage(); if (!cur || !stChecked.size) return;
+  if (!confirm('Xóa ' + fmt.format(stChecked.size) + ' acc đã chọn khỏi kho "' + (cur.name || '') + '"?')) return;
+  if (stWrite(cur, stLines(cur).filter(l => !stChecked.has(l)))) stChecked.clear();
+});
+$('#st-copyall').addEventListener('click', () => {
+  if (!stView.length) { toast('Không có acc để copy'); return; }
+  copy(stView.map(([l]) => l).join('\n'), 'Đã copy ' + fmt.format(stView.length) + ' acc');
+});
+$('#st-export').addEventListener('click', () => {
+  const cur = curStorage(); if (!cur) return;
+  const lines = stLines(cur);
+  if (!lines.length) { toast('Kho đang trống'); return; }
+  const url = URL.createObjectURL(new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' }));
+  const a = h('a', { href: url, download: (cur.name || 'kho-clone').replace(/[\\/:*?"<>|]+/g, '_') + '.txt' });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+});
+$('#st-rename').addEventListener('click', () => {
+  const cur = curStorage(); if (!cur) return;
+  const v = prompt('Tên kho:', cur.name || '');
+  if (v && v.trim()) store.renameStorage(cur.id, v.trim());
+});
+$('#st-del').addEventListener('click', () => {
+  const cur = curStorage(); if (!cur) return;
+  if (confirm('Xóa kho "' + (cur.name || '') + '" cùng toàn bộ ' + fmt.format(stLines(cur).length) + ' acc trong đó?')) { stChecked.clear(); store.removeStorage(cur.id); }
+});
+ 
 /* ----- trạng thái đồng bộ ----- */
 const SYNC_TEXT = { ok: 'Đã đồng bộ', pending: 'Đang đồng bộ…', offline: 'Ngoại tuyến', error: 'Lỗi đồng bộ', local: 'Lưu trên máy này' };
 let lastSync = 'ok';
@@ -1432,6 +1687,7 @@ function attach(s) {
   s.onKeys(k => { keys = { ...k }; refreshKeys(); });
   s.onPhones(list => { phones = list; renderPhones(); });
   s.onClones(list => { clones = list; renderClones(); });
+  s.onStorages(list => { storages = list; renderStorage(); });
   s.onSync(setSync);
   legacy = s.mode === 'cloud' ? readLegacy() : [];
   renderNotice(); renderPhones();
@@ -1439,8 +1695,8 @@ function attach(s) {
 }
 function detach() {
   if (store) store.stop();
-  store = null; orders = []; keys = {}; legacy = []; phones = []; clones = [];
-  render(); refreshKeys(); renderNotice(); renderPhones(); renderClones();
+  store = null; orders = []; keys = {}; legacy = []; phones = []; clones = []; storages = [];
+  render(); refreshKeys(); renderNotice(); renderPhones(); renderClones(); renderStorage();
 }
  
 /* ----- hộp đăng nhập ----- */
